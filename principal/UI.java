@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 //import java.text.DecimalFormat;
 
+import entity.Entity;
 import objects.OBJ_Heart;
-import objects.SuperObject;
 
 
 public class UI {
@@ -47,7 +47,7 @@ public class UI {
 		}
 
         // CREATE HUD OBJECTS   
-        SuperObject heart = new OBJ_Heart(gp);
+        Entity heart = new OBJ_Heart(gp);
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;

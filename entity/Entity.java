@@ -12,13 +12,13 @@ import principal.UtiliyTool;
 
 
 public class Entity {
-	GamePanel gp;
+	public GamePanel gp;
 
 	public int worldX, worldY;
 	public int speed;
 	
 	public BufferedImage up1,up2, down1, down2, left1, left2, right1, right2;
-	public String direction;
+	public String direction="down";
 
 	public int spriteCouter = 0;
 	public int spriteNum = 1;
@@ -30,6 +30,13 @@ public class Entity {
 	String dialogues[] = new String[20];
 	int dialogIndex = 0;
 
+	public BufferedImage image, image2, image3;
+    public String name;
+    public boolean collision = false;
+
+	//CHARACTER STATUS
+	public int maxLife;
+	public int life;
 
 	public Entity(GamePanel gp){
 		this.gp = gp;
@@ -125,7 +132,7 @@ public class Entity {
 		UtiliyTool uTool = new UtiliyTool();
 		BufferedImage image = null;
 		try{
-			image = ImageIO.read(getClass().getResourceAsStream(imagePath+".png"));
+			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
 			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
 		}catch(IOException e){
 			e.printStackTrace();
