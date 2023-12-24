@@ -1,6 +1,8 @@
 package entity;
 
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -91,12 +93,16 @@ public class Player extends Entity{
 			pickUpObject(objIndex);
 
 			//CHECK NPC COLLISION
-			 int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
-			 interactNPC(npcIndex);
+			int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+			interactNPC(npcIndex);
 
-			 //CHECK EVENT 
-			 gp.eHandler.checkEvent();
-			 gp.keyH.enterPressed = false;
+			//CHECK MONSTER COLLISION
+			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+			contactMonster(monsterIndex);
+
+			//CHECK EVENT 
+			gp.eHandler.checkEvent();
+			gp.keyH.enterPressed = false;
 
 			//IF COLLISION IS FALSE, PLAYER CAN MOVE
 			if(collisioOn == false){
@@ -119,6 +125,15 @@ public class Player extends Entity{
 				spriteCouter = 0;
 			}
 		}
+
+		//This needs to be outside of key if statement
+		if(invincible == true){
+			invincibleCounter++;
+			if(invincibleCounter > 60){
+				invincible = false;
+				invincibleCounter = 0;
+			}
+		}
 	}
 
 	public void pickUpObject(int i){
@@ -126,6 +141,14 @@ public class Player extends Entity{
 		}
 	}
 	
+	public void contactMonster(int i){
+		if(i != 999){
+			if(invincible == false){
+				life--;
+				invincible = true;
+			}
+		}
+	}
 	public void interactNPC(int i){
 		if(i != 999){
 			if(gp.keyH.enterPressed == true){
@@ -177,6 +200,10 @@ public class Player extends Entity{
 				break;	
 		}
 		g2.drawImage(image, screenX, screenY, null);
+		//debug
+		g2.setFont(new Font("Arial", Font.PLAIN, 26));
+		g2.setColor(Color.white);
+		g2.drawString("invincible" + invincibleCounter, 10,400);
 	}
 
 }
