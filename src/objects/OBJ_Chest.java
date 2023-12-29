@@ -1,25 +1,17 @@
 package objects;
 
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import entity.Entity;
 import principal.GamePanel;
 import principal.UtiliyTool;
 
-public class OBJ_Chest extends SuperObject {
+public class OBJ_Chest extends Entity {
 
     GamePanel gp;
     UtiliyTool uTool = new UtiliyTool();
 
     public OBJ_Chest(GamePanel gp){
+        super(gp);
         name = "Chest";
-        this.gp = gp;
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/chest.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
-        }catch(IOException e){
-            System.out.println("Erro ao carregar imagem do baú");
-        }
-
+        down1 = setup("/objects/chest", gp.tileSize, gp.tileSize); 
     }
 }

@@ -1,6 +1,5 @@
 package tile;
 
-
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 import principal.GamePanel;
 import principal.UtiliyTool;
-import tile.Tile;
 
 public class TileManeger {
     GamePanel gp;
