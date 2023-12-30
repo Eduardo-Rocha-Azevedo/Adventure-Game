@@ -9,6 +9,7 @@ public class MON_GreenSlime extends Entity{
     public MON_GreenSlime(GamePanel gp){
         super(gp);
 
+        type = 2;
         name = "Green Slime";
         speed = 1;
         maxLife = 4;
@@ -25,14 +26,14 @@ public class MON_GreenSlime extends Entity{
     }
 
     public void getImage(){
-        up1 = setup("/monster/greenslime_down_1");
-        up2 = setup("/monster/greenslime_down_2");
-        down1 = setup("/monster/greenslime_down_1");
-        down2 = setup("/monster/greenslime_down_2");
-        left1 = setup("/monster/greenslime_down_1");
-        left2 = setup("/monster/greenslime_down_2");
-        right1 = setup("/monster/greenslime_down_1");
-        right2 = setup("/monster/greenslime_down_2");
+        up1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
+        up2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
+        down1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
+        down2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
+        left1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
+        left2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
+        right1 = setup("/monster/greenslime_down_1", gp.tileSize, gp.tileSize);
+        right2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
     }
 
     //IA simple
@@ -59,5 +60,11 @@ public class MON_GreenSlime extends Entity{
 
 			actionLockCounter = 0;
 		}
+    }
+
+    public void damageReaction(){
+       actionLockCounter = 0;
+       direction = gp.player.direction;
+       
     }
 }

@@ -62,6 +62,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogState = 3;
+    public final int characterState = 4;
+    
 
 
     //CONSTRUCTOR======================
@@ -137,10 +139,14 @@ public class GamePanel extends JPanel implements Runnable{
        //MONSTER
          for(int i = 0; i < monster.length; i++){
           if(monster[i] != null){
+            if(monster[i].alive == true && monster[i].dyain == false){
                 monster[i].update();
+             }
+            if(monster[i].alive == false){
+                monster[i] = null;
+              }    
             }
          }
-
       }
       if(gameState == pauseState) {
        //nothing yet
@@ -205,10 +211,7 @@ public class GamePanel extends JPanel implements Runnable{
             }
 
             //empty list
-            for(int i = 0; i < entityList.size(); i++){
-                entityList.remove(i);
-            } 
-           
+            entityList.clear();
             //UI
             ui.draw(g2);
         }

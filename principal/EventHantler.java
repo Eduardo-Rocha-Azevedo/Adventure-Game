@@ -42,7 +42,7 @@ public class EventHantler {
 
         if(canTouchEvent == true){
             if(hit(27,16,"right") == true) {damagePit(27,16,gp.dialogState);}
-            if(hit(23,19,"any") == true) {damagePit(23,19,gp.dialogState);}
+            //if(hit(23,19,"any") == true) {damagePit(23,19,gp.dialogState);}
             if(hit(23,12,"up") == true) {healingPool(23,12,gp.dialogState);}
         }
        
@@ -73,7 +73,9 @@ public class EventHantler {
     }
 
     public void damagePit(int col,int row, int gameState ){
+     
         gp.gameState = gameState;
+        gp.playSE(6);
         gp.ui.currentDialog = "you fall into a hole";
         gp.player.life--;
         //eventRect[col][row].eventDone = true;
@@ -83,6 +85,8 @@ public class EventHantler {
     public void healingPool(int col, int row, int gameState){
         if(gp.keyH.enterPressed == true){
             gp.gameState = gameState;
+            gp.player.attackCanceled = true;
+            gp.playSE(2);
             gp.ui.currentDialog = "You drink the water.\nYour life is restored.";
             gp.player.life = gp.player.maxLife;
         }
