@@ -76,7 +76,7 @@ public class EventHantler {
      
         gp.gameState = gameState;
         gp.playSE(6);
-        gp.ui.currentDialog = "you fall into a hole";
+        gp.ui.currentDialog = "você caiu em um buraco";
         gp.player.life--;
         //eventRect[col][row].eventDone = true;
         canTouchEvent = false;
@@ -87,14 +87,15 @@ public class EventHantler {
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
             gp.playSE(2);
-            gp.ui.currentDialog = "You drink the water.\nYour life is restored.";
+            gp.ui.currentDialog = "Você bebeu água.\nSua vida foi restaurada.";
             gp.player.life = gp.player.maxLife;
+            gp.aSetter.setMonster();
         }
     }
 
     public void teleport(int col, int row, int gameState){
         gp.gameState = gameState;
-        gp.ui.currentDialog = "You are teleported";
+        gp.ui.currentDialog = "Você foi teletransportado";
         gp.player.worldX = 37 * gp.tileSize;
         gp.player.worldY = 10 * gp.tileSize;
     }

@@ -249,7 +249,13 @@ public class Player extends Entity{
 		if(i != 999){
 			if(invincible == false){
 				gp.playSE(6);
-				life--;
+				int damage = gp.monster[i].attack - defense;
+
+				if(damage < 0){
+					damage = 0;
+				}
+
+				life -= damage;
 				invincible = true;
 			}
 		}
@@ -261,17 +267,42 @@ public class Player extends Entity{
 			if(gp.monster[i].invincible == false){
 
 				gp.playSE(5);
-				gp.monster[i].life--;
+				int damage = attack - gp.monster[i].defense;
+
+				if(damage < 0){
+					damage = 0;
+				}
+
+				gp.ui.addMassage(damage + " dano!");
+				gp.monster[i].life -= damage;
 				gp.monster[i].invincible = true;
 				gp.monster[i].damageReaction();
 
 				if(gp.monster[i].life <= 0){
 					gp.monster[i].dyain = true;
+					gp.ui.addMassage("Matou " + gp.monster[i].name+"!");
+					gp.ui.addMassage("Exp + " + gp.monster[i].exp);
+					exp += gp.monster[i].exp;
+					checkLevelUp();
 				}
 			}
 		}
 	}
-
+	public void checkLevelUp(){
+		if(exp >= nextLevelExp){
+			level++;
+			nextLevelExp *= 2;
+			maxLife += 2;
+			strength++;
+			dexterity++;
+			attack = getAttack();
+			defense = getDefense();
+			
+			gp.playSE(8);
+			gp.gameState = gp.dialogState;
+			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
+		}
+	}
 	public void draw(Graphics g2) {
 
 		BufferedImage image = null;

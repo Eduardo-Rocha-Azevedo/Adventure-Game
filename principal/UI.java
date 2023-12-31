@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 //import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import entity.Entity;
 import objects.OBJ_Heart;
@@ -26,11 +27,11 @@ public class UI {
 
     //mensage info
     public boolean messageOn = false;
-    public String message = "";
     public String currentDialog = "";
     public int commandNum = 0;
-    int messageCounter = 0;
     public int titleScreenState = 0;
+    ArrayList<String> message = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
    
     public UI(GamePanel gp){
         this.gp = gp;
@@ -53,9 +54,9 @@ public class UI {
         heart_blank = heart.image3;
     }
 
-    public void showMassage(String text){
-        message = text;
-        messageOn = true;
+    public void addMassage(String text){
+        message.add(text);
+        messageCounter.add(0);
     }
 
     public void draw(Graphics2D g2){
@@ -73,6 +74,7 @@ public class UI {
         if(gp.gameState == gp.playState){
             //HEARTS
             drawPlayerLife();
+            drawMessage();
         }
         //PAUSE STATE
         else if(gp.gameState == gp.pauseState){
@@ -121,6 +123,30 @@ public class UI {
             }
             i++;
             x += gp.tileSize;
+        }
+    }
+
+    public void drawMessage(){
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize*4;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25f));
+
+        for(int i = 0; i < message.size(); i++){
+            if(message.get(i) != null){
+                g2.setColor(Color.gray);
+                g2.drawString(message.get(i), messageX + 2, messageY +2);
+
+                g2.setColor(Color.white);
+                g2.drawString(message.get(i), messageX, messageY);
+
+                int counter = messageCounter.get(i) + 1; // messgeCounter++
+                messageCounter.set(i, counter);//define o contator para o array
+                messageY +=30;
+                if(messageCounter.get(i) >180){
+                    message.remove(i);
+                    messageCounter.remove(i);  
+                }
+            }
         }
     }
 
@@ -255,17 +281,17 @@ public class UI {
         final int lineHeight = 35;
 
         //NAME
-        g2.drawString("Level: ",textX, textY);
+        g2.drawString("Level ",textX, textY);
         textY += lineHeight;
-        g2.drawString("Life: ",textX, textY);
+        g2.drawString("Life",textX, textY);
         textY += lineHeight;
-        g2.drawString("Strength: ",textX, textY);
+        g2.drawString("Força",textX, textY);
         textY += lineHeight;
-        g2.drawString("Dexterity: ", textX, textY);
+        g2.drawString("Destreza", textX, textY);
         textY += lineHeight;
-        g2.drawString("Attack: ", textX, textY);
+        g2.drawString("Ataque", textX, textY);
         textY += lineHeight;
-        g2.drawString("Defense: ", textX, textY);
+        g2.drawString("Defesa: ", textX, textY);
         textY += lineHeight;
         g2.drawString("Exp: ", textX, textY);
         textY += lineHeight;
@@ -273,9 +299,9 @@ public class UI {
         textY += lineHeight;
         g2.drawString("Coin: ", textX, textY);
         textY += lineHeight + 20;
-        g2.drawString("Weapon: ", textX, textY);
+        g2.drawString("Arma ", textX, textY);
         textY += lineHeight + 15;
-        g2.drawString("Shield: ", textX, textY);
+        g2.drawString("Escudo", textX, textY);
         textY += lineHeight;
 
         //VALUE
