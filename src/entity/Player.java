@@ -1,14 +1,13 @@
 package entity;
 
-
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import objects.OBJ_Key;
+import objects.OBJ_Shield_Wood;
+import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
 import principal.KeyHandler;
 
@@ -19,7 +18,10 @@ public class Player extends Entity{
 	
 	public final int screenX;
 	public final int screenY;
-	
+	int standCounter = 0;
+	public boolean attackCanceled = false;
+	public ArrayList <Entity> inventory = new ArrayList<>();
+	public final int maxInventorySize = 20;
 
 	public Player(GamePanel gp, KeyHandler keyH) {
 		super(gp);
@@ -44,9 +46,15 @@ public class Player extends Entity{
 		getPlayerAttackImage();
 		setDefultValues();
 		getPlayerImage();
+		setItems();
 		
 	}
-	
+	public void setItems(){
+		inventory.add(currentWeapon);
+		inventory.add(currentShield);
+		inventory.add(new OBJ_Key(gp));
+		inventory.add(new OBJ_Key(gp));
+	}
 	public void setDefultValues() {
 		
 		worldX = gp.tileSize * 23;
@@ -55,8 +63,28 @@ public class Player extends Entity{
 		direction = "down";
 
 		//PLAYER STATUS
+		level = 1;
 		maxLife = 6;
 		life = maxLife;	
+		strength = 1; //The more strength he has, the more damage
+		dexterity = 1; // the more dexterity he has, the more defense
+		exp = 0;
+		nextLevelExp = 5;
+		coin = 0;
+		currentWeapon = new OBJ_Sword_Normal(gp);
+		currentShield = new OBJ_Shield_Wood(gp);
+		attack = getAttack(); //the total attack value is decided by strength and Weapon
+		defense = getDefense(); //the total defense value is decided by dexterity and Shield
+	}
+
+	public int getAttack(){
+		
+		return attack = strength * currentWeapon.attackValue;
+	}
+
+	public int getDefense(){
+		
+		return defense = dexterity * currentShield.defenseValue;
 	}
 
 	public void getPlayerImage(){
@@ -134,6 +162,13 @@ public class Player extends Entity{
 					case "right":worldX += speed;break;
 				}
 			}
+			if(keyH.enterPressed == true && attackCanceled == false){
+				gp.playSE(7);
+				attacking = true;
+				spriteCouter = 0;
+			}
+
+			attackCanceled = false;
 			gp.keyH.enterPressed = false;
 			spriteCouter++;
 
@@ -211,14 +246,11 @@ public class Player extends Entity{
 		if(gp.keyH.enterPressed == true){
 
 			if(i != 999){
-
+				attackCanceled = true;
 				gp.gameState = gp.dialogState;
 				gp.npc[i].speak();
 			}
-			else {
-				gp.playSE(7);
-				attacking = true;
-			}
+
 		}
 	}
 
@@ -226,7 +258,13 @@ public class Player extends Entity{
 		if(i != 999){
 			if(invincible == false){
 				gp.playSE(6);
-				life--;
+				int damage = gp.monster[i].attack - defense;
+
+				if(damage < 0){
+					damage = 0;
+				}
+
+				life -= damage;
 				invincible = true;
 			}
 		}
@@ -238,17 +276,43 @@ public class Player extends Entity{
 			if(gp.monster[i].invincible == false){
 
 				gp.playSE(5);
-				gp.monster[i].life--;
+				int damage = attack - gp.monster[i].defense;
+
+				if(damage < 0){
+					damage = 0;
+				}
+
+				gp.ui.addMassage(damage + " dano!");
+				gp.monster[i].life -= damage;
 				gp.monster[i].invincible = true;
 				gp.monster[i].damageReaction();
 
 				if(gp.monster[i].life <= 0){
 					gp.monster[i].dyain = true;
+					gp.ui.addMassage("Matou " + gp.monster[i].name+"!");
+					gp.ui.addMassage("Exp + " + gp.monster[i].exp);
+					exp += gp.monster[i].exp;
+					checkLevelUp();
 				}
 			}
 		}
 	}
-
+	public void checkLevelUp(){
+		if(exp >= nextLevelExp){
+			level++;
+			nextLevelExp = nextLevelExp *5;
+			maxLife+=2;
+			strength++;
+			dexterity++;
+			attack = getAttack();
+			defense = getDefense();
+			
+			gp.playSE(8);
+			gp.gameState = gp.dialogState;
+			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
+			
+		}
+	}
 	public void draw(Graphics g2) {
 
 		BufferedImage image = null;

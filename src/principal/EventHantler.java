@@ -42,7 +42,7 @@ public class EventHantler {
 
         if(canTouchEvent == true){
             if(hit(27,16,"right") == true) {damagePit(27,16,gp.dialogState);}
-            if(hit(23,19,"any") == true) {damagePit(23,19,gp.dialogState);}
+            //if(hit(23,19,"any") == true) {damagePit(23,19,gp.dialogState);}
             if(hit(23,12,"up") == true) {healingPool(23,12,gp.dialogState);}
         }
        
@@ -73,8 +73,10 @@ public class EventHantler {
     }
 
     public void damagePit(int col,int row, int gameState ){
+     
         gp.gameState = gameState;
-        gp.ui.currentDialog = "you fall into a hole";
+        gp.playSE(6);
+        gp.ui.currentDialog = "você caiu em um buraco";
         gp.player.life--;
         //eventRect[col][row].eventDone = true;
         canTouchEvent = false;
@@ -83,14 +85,17 @@ public class EventHantler {
     public void healingPool(int col, int row, int gameState){
         if(gp.keyH.enterPressed == true){
             gp.gameState = gameState;
-            gp.ui.currentDialog = "You drink the water.\nYour life is restored.";
+            gp.player.attackCanceled = true;
+            gp.playSE(2);
+            gp.ui.currentDialog = "Você bebeu água.\nSua vida foi restaurada.";
             gp.player.life = gp.player.maxLife;
+            gp.aSetter.setMonster();
         }
     }
 
     public void teleport(int col, int row, int gameState){
         gp.gameState = gameState;
-        gp.ui.currentDialog = "You are teleported";
+        gp.ui.currentDialog = "Você foi teletransportado";
         gp.player.worldX = 37 * gp.tileSize;
         gp.player.worldY = 10 * gp.tileSize;
     }

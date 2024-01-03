@@ -17,7 +17,6 @@ public class Entity {
 	public GamePanel gp;
 
 	public int worldX, worldY;
-	public int speed;
 
 	
 	// IMAGES CONFIGS
@@ -47,17 +46,31 @@ public class Entity {
 	public boolean alive = true;
 	public boolean dyain = false;
 	boolean hpBarOn = false;
-
+	//DIALOG
 	String dialogues[] = new String[20];
 	int dialogIndex = 0;
-
-    public String name;
-   
-	public int type; //0 = player, 1 = npc, 2 = monster
 
 	//CHARACTER STATUS
 	public int maxLife;
 	public int life;
+	public int type; //0 = player, 1 = npc, 2 = monster
+	public String name;
+	public int speed;
+	public int level;
+	public int strength;
+	public int dexterity;
+	public int attack;
+	public int defense;
+	public int exp;
+	public int nextLevelExp;
+	public int coin;
+	public Entity currentWeapon;
+	public Entity currentShield;
+
+	// ITEM ATTRIBUTES
+	public int attackValue;
+	public int defenseValue;
+	public String description = "";
 
 	public Entity(GamePanel gp){
 		this.gp = gp;
@@ -83,7 +96,12 @@ public class Entity {
 			if(gp.player.invincible == false){
 				//we can give damage
 				gp.playSE(6);
-				gp.player.life--;
+				int damage = attack - gp.player.defense;
+
+				if(damage < 0){
+					damage = 0;
+				}
+				gp.player.life -= damage;
 				gp.player.invincible = true; 
 			}
 		}
