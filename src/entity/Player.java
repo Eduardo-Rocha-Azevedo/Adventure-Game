@@ -39,22 +39,20 @@ public class Player extends Entity{
 
 		solidArea.width = 32;
 		solidArea.height = 32;
-		
-		attackArea.width = 36;
-		attackArea.height = 36;
-
-		getPlayerAttackImage();
+	
 		setDefultValues();
 		getPlayerImage();
+		getPlayerAttackImage();
 		setItems();
 		
 	}
+	
+	//add items inicially
 	public void setItems(){
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(new OBJ_Key(gp));
-		inventory.add(new OBJ_Key(gp));
 	}
+	
 	public void setDefultValues() {
 		
 		worldX = gp.tileSize * 23;
@@ -75,10 +73,11 @@ public class Player extends Entity{
 		currentShield = new OBJ_Shield_Wood(gp);
 		attack = getAttack(); //the total attack value is decided by strength and Weapon
 		defense = getDefense(); //the total defense value is decided by dexterity and Shield
+		
 	}
 
 	public int getAttack(){
-		
+		attackArea = currentWeapon.attackArea;
 		return attack = strength * currentWeapon.attackValue;
 	}
 
@@ -238,6 +237,17 @@ public class Player extends Entity{
 
 	public void pickUpObject(int i){
 		if(i != 999){
+			String text;
+			if(inventory.size() != maxInventorySize){
+				inventory.add(gp.obj[i]);
+				gp.playSE(1);
+				text = "Pegou " + gp.obj[i].name +"!";
+			}
+			else{
+				text = "Inventário cheio!";
+			}
+			gp.ui.addMassage(text);
+			gp.obj[i] = null;
 		}
 	}
 
@@ -311,6 +321,25 @@ public class Player extends Entity{
 			gp.gameState = gp.dialogState;
 			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
 			
+		}
+	}
+	
+	public void selectItem(){
+		int itemIndex = gp.ui.getItemIndexOnSlot();
+		if(itemIndex < inventory.size()){
+			Entity selectedItem = inventory.get(itemIndex);
+
+			if(selectedItem.type ==  type_sword || selectedItem.type == type_axe){
+				currentWeapon = selectedItem;
+				attack = getAttack();
+			}
+			if(selectedItem.type == type_shield){
+				currentShield = selectedItem;
+				defense = getDefense();
+			}
+			if(selectedItem.type == type_consumable){
+				//late				
+			}
 		}
 	}
 	public void draw(Graphics g2) {
