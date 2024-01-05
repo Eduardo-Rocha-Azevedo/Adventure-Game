@@ -1,11 +1,12 @@
 package entity;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import objects.OBJ_Key;
+
 import objects.OBJ_Shield_Wood;
 import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
@@ -15,7 +16,7 @@ import principal.KeyHandler;
 public class Player extends Entity{
 	
 	KeyHandler keyH;
-	
+	Graphics2D g2;
 	public final int screenX;
 	public final int screenY;
 	int standCounter = 0;
@@ -69,10 +70,12 @@ public class Player extends Entity{
 		exp = 0;
 		nextLevelExp = 5;
 		coin = 0;
+		
 		currentWeapon = new OBJ_Sword_Normal(gp);
-		currentShield = new OBJ_Shield_Wood(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
 		attack = getAttack(); //the total attack value is decided by strength and Weapon
 		defense = getDefense(); //the total defense value is decided by dexterity and Shield
+		
 		
 	}
 
@@ -99,14 +102,29 @@ public class Player extends Entity{
 	}
 
 	public void getPlayerAttackImage(){
-		 attackUp1 = setup("/player/boy_attack_up_1",gp.tileSize, gp.tileSize * 2);         // 16x32 px
-         attackUp2 = setup("/player/boy_attack_up_2",gp.tileSize, gp.tileSize * 2);         // 16x32 px
-         attackDown1 = setup("/player/boy_attack_down_1",gp.tileSize, gp.tileSize * 2);     // 16x32 px
-         attackDown2 = setup("/player/boy_attack_down_2",gp.tileSize, gp.tileSize * 2);     // 16x32 px
-         attackLeft1 = setup("/player/boy_attack_left_1",gp.tileSize * 2, gp.tileSize);      // 32x16 px
-         attackLeft2 = setup("/player/boy_attack_left_2",gp.tileSize * 2, gp.tileSize);      // 32x16 px
-         attackRight1 = setup("/player/boy_attack_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
-         attackRight2 = setup("/player/boy_attack_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+		
+        if(currentWeapon.type == type_sword){
+        
+            attackUp1 = setup("/player/boy_attack_up_1",gp.tileSize, gp.tileSize*2);         // 16x32 px
+            attackUp2 = setup("/player/boy_attack_up_2",gp.tileSize, gp.tileSize*2);         // 16x32 px
+            attackDown1 = setup("/player/boy_attack_down_1",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackDown2 = setup("/player/boy_attack_down_2",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackLeft1 = setup("/player/boy_attack_left_1",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackLeft2 = setup("/player/boy_attack_left_2",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackRight1 = setup("/player/boy_attack_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+            attackRight2 = setup("/player/boy_attack_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+        }
+        else if(currentWeapon.type == type_axe) {
+       
+            attackUp1 = setup("/player/boy_axe_up_1",gp.tileSize, gp.tileSize * 2);         // 16x32 px
+            attackUp2 = setup("/player/boy_axe_up_2",gp.tileSize, gp.tileSize * 2);         // 16x32 px
+            attackDown1 = setup("/player/boy_axe_down_1",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackDown2 = setup("/player/boy_axe_down_2",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackLeft1 = setup("/player/boy_axe_left_1",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackLeft2 = setup("/player/boy_axe_left_2",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackRight1 = setup("/player/boy_axe_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+            attackRight2 = setup("/player/boy_axe_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+        }
 	}
 	
 	public void update() {
@@ -167,7 +185,7 @@ public class Player extends Entity{
 				spriteCouter = 0;
 			}
 
-			attackCanceled = false;
+			
 			gp.keyH.enterPressed = false;
 			spriteCouter++;
 
@@ -190,6 +208,7 @@ public class Player extends Entity{
 				invincibleCounter = 0;
 			}
 		}
+		
 	}
 
 	public void attacking(){
@@ -246,7 +265,7 @@ public class Player extends Entity{
 			else{
 				text = "Inventário cheio!";
 			}
-			gp.ui.addMassage(text);
+			gp.ui.addMessage(text);
 			gp.obj[i] = null;
 		}
 	}
@@ -259,6 +278,8 @@ public class Player extends Entity{
 				attackCanceled = true;
 				gp.gameState = gp.dialogState;
 				gp.npc[i].speak();
+			}else{
+				attacking = true;
 			}
 
 		}
@@ -281,37 +302,38 @@ public class Player extends Entity{
 	}
 	
 	public void damageMonster(int i){
-		if(i != 999){
+		if (i != 999) {
+            if (gp.monster[i].invincible == false) {
 
-			if(gp.monster[i].invincible == false){
+                gp.playSE(5);
 
-				gp.playSE(5);
-				int damage = attack - gp.monster[i].defense;
+                int damage = attack - gp.monster[i].defense;
+                if (damage < 0) {
+                    damage = 0;
+                }
 
-				if(damage < 0){
-					damage = 0;
-				}
+                gp.monster[i].life -= damage;
+                gp.ui.addMessage(damage + " damage!");
 
-				gp.ui.addMassage(damage + " dano!");
-				gp.monster[i].life -= damage;
-				gp.monster[i].invincible = true;
-				gp.monster[i].damageReaction();
+                gp.monster[i].invincible = true;
+                gp.monster[i].damageReaction();
 
-				if(gp.monster[i].life <= 0){
-					gp.monster[i].dyain = true;
-					gp.ui.addMassage("Matou " + gp.monster[i].name+"!");
-					gp.ui.addMassage("Exp + " + gp.monster[i].exp);
-					exp += gp.monster[i].exp;
-					checkLevelUp();
-				}
-			}
-		}
+                if (gp.monster[i].life <= 0) {
+                    gp.monster[i].life = 0;
+                    gp.monster[i].dyain = true;
+                    gp.ui.addMessage("Killed the " + gp.monster[i].name + "!");
+                    gp.ui.addMessage("Exp " + gp.monster[i].exp);
+                    exp += gp.monster[i].exp;
+                    checkLevelUp();
+                }
+            }
+        }
 	}
 	public void checkLevelUp(){
 		if(exp >= nextLevelExp){
 			level++;
 			nextLevelExp = nextLevelExp *5;
-			maxLife+=2;
+			 
 			strength++;
 			dexterity++;
 			attack = getAttack();
@@ -320,7 +342,7 @@ public class Player extends Entity{
 			gp.playSE(8);
 			gp.gameState = gp.dialogState;
 			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
-			
+			life = maxLife;
 		}
 	}
 	
@@ -332,13 +354,15 @@ public class Player extends Entity{
 			if(selectedItem.type ==  type_sword || selectedItem.type == type_axe){
 				currentWeapon = selectedItem;
 				attack = getAttack();
+				getPlayerAttackImage();
 			}
 			if(selectedItem.type == type_shield){
 				currentShield = selectedItem;
 				defense = getDefense();
 			}
 			if(selectedItem.type == type_consumable){
-				//late				
+				selectedItem.use(this);
+				inventory.remove(itemIndex);			
 			}
 		}
 	}

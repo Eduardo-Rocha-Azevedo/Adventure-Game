@@ -58,7 +58,7 @@ public class UI {
         heart_blank = heart.image3;
     }
 
-    public void addMassage(String text){
+    public void addMessage(String text){
         message.add(text);
         messageCounter.add(0);
     }

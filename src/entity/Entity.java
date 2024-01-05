@@ -25,8 +25,8 @@ public class Entity {
 	public BufferedImage image, image2, image3;
 	public String direction="down";
 
-	public Rectangle attackArea = new Rectangle(0,0, 48,48);
-	public Rectangle solidArea = new Rectangle(0,0, 0,0);
+	public Rectangle attackArea = new Rectangle(0,0, 0,0);
+	public Rectangle solidArea = new Rectangle(0,0, 48,48);
 	public int solidAreaDefultX, solidAreaDefultY;
 
 	// COUNTER AND COLLISSION
@@ -100,6 +100,8 @@ public class Entity {
 
 	public void speak(){}
 
+	public void use(Entity e){}
+	
 	public void update(){
 		setAction();
 
@@ -159,7 +161,8 @@ public class Entity {
 		BufferedImage image = null;
 		int screenX = worldX - gp.player.worldX + gp.player.screenX;
         int screenY = worldY - gp.player.worldY + gp.player.screenY;
-
+		int tempScreenX = screenX;
+		int tempScreenY = screenY;
         if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
 			worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
 			worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
@@ -167,26 +170,58 @@ public class Entity {
 
 	
 			switch(direction){
-			case "up":
-				if(spriteNum == 1){image = up1;}
-				if(spriteNum == 2){image = up2;}
+				case "up": 
+				if(attacking == false) {
+					if(spriteNum == 1) { image = up1;}
+					if(spriteNum == 2) { image = up2;}
+				}
+				if(attacking == true)  {
+					tempScreenY = screenY - gp.tileSize;
+					if(spriteNum == 1) {image = attackUp1;}
+					if(spriteNum == 2) {image = attackUp2;}
+				}
 				break;
-			case "down":
-				if(spriteNum == 1){image = down1;}	
-				if(spriteNum == 2){image = down2;}
-				break;
+
+			case "down": 
+					if(attacking == false){
+
+						if(spriteNum == 1) {image = down1;}
+						if(spriteNum == 2) {image = down2;}
+					}
+					if(attacking == true){
+
+						if(spriteNum == 1) {image = attackDown1;}
+						if(spriteNum == 2) {image = attackDown2;}
+					}
+					break;
+ 				
 			case "left":
-				if(spriteNum == 1){image = left1;}		
-				if(spriteNum == 2){image = left2;}
-				break;
-			case "right":
-				if(spriteNum == 1){image = right1;}
-				if(spriteNum == 2){	image = right2;}
-			break;
-					
+					if(attacking == false){
+
+						if(spriteNum == 1) {image = left1;}
+						if(spriteNum == 2) {image = left2;}
+					}
+					if(attacking == true){
+						tempScreenX = screenX - gp.tileSize;
+						if(spriteNum == 1) {image = attackLeft1;}
+						if(spriteNum == 2) {image = attackLeft2;}
+					}
+					break;
+
+			case "right": 
+					if(attacking == false){
+
+						if(spriteNum == 1) {image = right1;}
+						if(spriteNum == 2) {image = right2;}
+					}
+					if(attacking == true){
+						if(spriteNum == 1) {image = attackRight1;}
+						if(spriteNum == 2) {image = attackRight2;}
+					}
+					break;	
 		}
 		// Monster HP bar
-		if(type == 2 && hpBarOn == true){
+		if(type == type_monster && hpBarOn == true){
 
 			double oneScale = (double)gp.tileSize /maxLife;
 			double hpBarValue = oneScale * life;
@@ -216,10 +251,12 @@ public class Entity {
 			dyainAnimation(g2);
 		}
 
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
 		changeAlpha(g2, 1f);
         }
 	}
+	
+	
 	//animacao de dano
 	public void dyainAnimation(Graphics2D g2){
 		dyainCounter++;
@@ -248,15 +285,19 @@ public class Entity {
 	}
 
 	//carrega a img
-	public BufferedImage setup(String imagePath, int width, int height){	
-		UtiliyTool uTool = new UtiliyTool();
-		BufferedImage image = null;
-		try{
-			image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
-			image = uTool.scaleImage(image, width, height);
-		}catch(IOException e){
-			e.printStackTrace();
-		}
-		return image;
-	}
+	public BufferedImage setup(String imagePath, int width, int height)
+    {
+        UtiliyTool uTool = new UtiliyTool();
+        BufferedImage image = null;
+
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image,width,height);   //it scales to tilesize , will fix for player attack(16px x 32px) by adding width and height
+        }
+        catch (IOException e) {
+        e.printStackTrace();
+        }
+        return image;
+    }
 }
+
