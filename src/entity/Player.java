@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-
+import objects.OBJ_Fireball;
 import objects.OBJ_Shield_Wood;
 import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
@@ -40,7 +40,7 @@ public class Player extends Entity{
 
 		solidArea.width = 32;
 		solidArea.height = 32;
-	
+		update();
 		setDefultValues();
 		getPlayerImage();
 		getPlayerAttackImage();
@@ -71,11 +71,16 @@ public class Player extends Entity{
 		nextLevelExp = 5;
 		coin = 0;
 		
+		//ITEMS
+	
 		currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+		projectile = new OBJ_Fireball(gp);
 		attack = getAttack(); //the total attack value is decided by strength and Weapon
 		defense = getDefense(); //the total defense value is decided by dexterity and Shield
 		
+
+
 		
 	}
 
@@ -198,6 +203,19 @@ public class Player extends Entity{
 				}
 				spriteCouter = 0;
 			}
+			
+		}
+
+		//PROJECTILE
+		if(gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailabelCounter == 30){
+
+			//set defult coordinates, direction and user
+			projectile.set(worldX, worldY, direction,true, this);
+
+			//add projectile to the list
+			gp.projectileList.add(projectile);	
+			shotAvailabelCounter = 0;
+			gp.playSE(10);
 		}
 
 		//This needs to be outside of key if statement
@@ -208,7 +226,9 @@ public class Player extends Entity{
 				invincibleCounter = 0;
 			}
 		}
-		
+		if(shotAvailabelCounter < 30){
+			shotAvailabelCounter++;
+		}
 	}
 
 	public void attacking(){
@@ -239,7 +259,7 @@ public class Player extends Entity{
 
 			//check collision with the update worldX/Y and solidArea
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-			damageMonster(monsterIndex);
+			damageMonster(monsterIndex, attack);
 
 			//After attack, reset player's worldX/Y and solidArea
 			worldX = currentWorldX;
@@ -287,7 +307,7 @@ public class Player extends Entity{
 
 	public void contactMonster(int i){
 		if(i != 999){
-			if(invincible == false){
+			if(invincible == false && gp.monster[i].dyain == false){
 				gp.playSE(6);
 				int damage = gp.monster[i].attack - defense;
 
@@ -301,7 +321,7 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void damageMonster(int i){
+	public void damageMonster(int i, int attack){
 		if (i != 999) {
             if (gp.monster[i].invincible == false) {
 
@@ -313,7 +333,7 @@ public class Player extends Entity{
                 }
 
                 gp.monster[i].life -= damage;
-                gp.ui.addMessage(damage + " damage!");
+                gp.ui.addMessage(damage + " Dano!");
 
                 gp.monster[i].invincible = true;
                 gp.monster[i].damageReaction();
@@ -321,7 +341,7 @@ public class Player extends Entity{
                 if (gp.monster[i].life <= 0) {
                     gp.monster[i].life = 0;
                     gp.monster[i].dyain = true;
-                    gp.ui.addMessage("Killed the " + gp.monster[i].name + "!");
+                    gp.ui.addMessage("Matou " + gp.monster[i].name + "!");
                     gp.ui.addMessage("Exp " + gp.monster[i].exp);
                     exp += gp.monster[i].exp;
                     checkLevelUp();
@@ -333,7 +353,7 @@ public class Player extends Entity{
 		if(exp >= nextLevelExp){
 			level++;
 			nextLevelExp = nextLevelExp *5;
-			 
+			maxLife += 2; 
 			strength++;
 			dexterity++;
 			attack = getAttack();
@@ -342,7 +362,7 @@ public class Player extends Entity{
 			gp.playSE(8);
 			gp.gameState = gp.dialogState;
 			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
-			life = maxLife;
+			
 		}
 	}
 	

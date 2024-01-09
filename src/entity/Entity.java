@@ -38,6 +38,7 @@ public class Entity {
 	public int spriteNum = 1;
 	int dyainCounter = 0;
 	int hpBarCounter = 0;
+	public int shotAvailabelCounter = 0;
 
 
 	//state
@@ -64,13 +65,17 @@ public class Entity {
 	public int exp;
 	public int nextLevelExp;
 	public int coin;
+	public int maxCosmo;
+	public int cosmo;
 	public Entity currentWeapon;
 	public Entity currentShield;
+	public Projectile projectile;
 
 	// ITEM ATTRIBUTES
 	public int attackValue;
 	public int defenseValue;
 	public String description = "";
+	public int useCost;
 	// TYPE
 	public int type; 
 	public final int type_player = 0;
@@ -274,7 +279,7 @@ public class Entity {
 
 		if(dyainCounter > i*8){
 			alive = false;
-			dyain = false;
+			
 		}
 		
 	}

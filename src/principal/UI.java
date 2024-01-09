@@ -157,7 +157,8 @@ public class UI {
 
     public void drawTitleScreen(){
         if(titleScreenState == 0){
-             //title name
+             
+            //title name
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
             String text = "Ancient Ruin ";
             int x = getXForCenterText(text);
@@ -204,7 +205,7 @@ public class UI {
             if(commandNum == 2){
                 g2.drawString(">", x-gp.tileSize, y);
             }
-
+          
         }
         else if (titleScreenState == 1){
             // class selection screen
