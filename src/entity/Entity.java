@@ -65,6 +65,7 @@ public class Entity {
 	public int exp;
 	public int nextLevelExp;
 	public int coin;
+	public int value;
 	public int maxCosmo;
 	public int cosmo;
 	public Entity currentWeapon;
@@ -85,6 +86,7 @@ public class Entity {
 	public final int type_axe = 4;
 	public final int type_shield = 5;
 	public final int type_consumable = 6;
+	public final int type_pickOnly = 7;
 
 	public Entity(GamePanel gp){
 		this.gp = gp;
@@ -102,11 +104,20 @@ public class Entity {
 	public void setAction(){}
 
 	public void damageReaction(){}
-
 	public void speak(){}
-
 	public void use(Entity e){}
-	
+	public void checkDrop(){}
+	public void dropItem(Entity droppedItem){
+		for(int i = 0; i < gp.obj.length; i++){
+			if(gp.obj[i] == null){
+				gp.obj[i] = droppedItem;
+				gp.obj[i].worldX = worldX; // the dead monster's worldX
+				gp.obj[i].worldY = worldY; // the dead monster's worldY
+				break;
+			}
+		}
+	}
+
 	public void update(){
 		setAction();
 
@@ -118,17 +129,7 @@ public class Entity {
 		boolean contactPlayer = gp.cChecker.checkPlayer(this);
 		
 		if(this.type == type_monster && contactPlayer == true){
-			if(gp.player.invincible == false){
-				//we can give damage
-				gp.playSE(6);
-				int damage = attack - gp.player.defense;
-
-				if(damage < 0){
-					damage = 0;
-				}
-				gp.player.life -= damage;
-				gp.player.invincible = true; 
-			}
+			damagePlayer(attack);
 		}
 
 		//IF COLLISION IS FALSE, PLAYER CAN MOVE
@@ -154,13 +155,30 @@ public class Entity {
 
 		if(invincible == true){
 			invincibleCounter++;
-			if(invincibleCounter > 40){
+			if(invincibleCounter > 30){
 				invincible = false;
 				invincibleCounter = 0;
 			}
 		}
+		if(shotAvailabelCounter < 30){
+			shotAvailabelCounter++;
+		}
 	}
+	
+	public void damagePlayer(int attack){
+		if(gp.player.invincible == false){
+			//we can give damage
+			gp.playSE(6);
+			int damage = attack - gp.player.defense;
 
+			if(damage < 0){
+				damage = 0;
+			}
+			gp.player.life -= damage;
+			gp.player.invincible = true; 
+		}
+	}
+	
 	public void draw(Graphics2D g2){
 		
 		BufferedImage image = null;

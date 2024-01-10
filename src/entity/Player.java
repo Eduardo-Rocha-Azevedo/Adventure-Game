@@ -48,12 +48,6 @@ public class Player extends Entity{
 		
 	}
 	
-	//add items inicially
-	public void setItems(){
-		inventory.add(currentWeapon);
-		inventory.add(currentShield);
-	}
-	
 	public void setDefultValues() {
 		
 		worldX = gp.tileSize * 23;
@@ -70,6 +64,8 @@ public class Player extends Entity{
 		exp = 0;
 		nextLevelExp = 5;
 		coin = 0;
+		maxCosmo = 4;
+		cosmo = maxCosmo;
 		
 		//ITEMS
 	
@@ -83,7 +79,13 @@ public class Player extends Entity{
 
 		
 	}
-
+	
+	//add items inicially
+	public void setItems(){
+		inventory.add(currentWeapon);
+		inventory.add(currentShield);
+	}
+	
 	public int getAttack(){
 		attackArea = currentWeapon.attackArea;
 		return attack = strength * currentWeapon.attackValue;
@@ -207,10 +209,13 @@ public class Player extends Entity{
 		}
 
 		//PROJECTILE
-		if(gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailabelCounter == 30){
+		if(gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailabelCounter == 30 && projectile.haveResource(this) == true){
 
 			//set defult coordinates, direction and user
 			projectile.set(worldX, worldY, direction,true, this);
+
+			//substract the cost (cosmo)
+			projectile.substracResource(this);
 
 			//add projectile to the list
 			gp.projectileList.add(projectile);	
@@ -272,21 +277,37 @@ public class Player extends Entity{
 			spriteCouter = 0;
 			attacking = false;
 		}
+		if(life > maxLife){
+            life = maxLife;
+        }
+		if(cosmo > maxCosmo){
+			cosmo = maxCosmo;
+		}
+
 	}
 
 	public void pickUpObject(int i){
 		if(i != 999){
-			String text;
-			if(inventory.size() != maxInventorySize){
-				inventory.add(gp.obj[i]);
-				gp.playSE(1);
-				text = "Pegou " + gp.obj[i].name +"!";
+			//PICKUP ONLY ITEMS
+			if(gp.obj[i].type == type_pickOnly){
+				gp.obj[i].use(this);
+				gp.obj[i] = null;
 			}
-			else{
-				text = "Inventário cheio!";
+
+			//INVENTRY ITEMS
+			else {
+				String text;
+				if(inventory.size() != maxInventorySize){
+					inventory.add(gp.obj[i]);
+					gp.playSE(1);
+					text = "Pegou " + gp.obj[i].name +"!";
+				}
+				else{
+					text = "Inventário cheio!";
+				}
+				gp.ui.addMessage(text);
+				gp.obj[i] = null;
 			}
-			gp.ui.addMessage(text);
-			gp.obj[i] = null;
 		}
 	}
 
@@ -321,8 +342,9 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void damageMonster(int i, int attack){
-		if (i != 999) {
+	public void damageMonster(int i, int attack) {
+
+        if (i != 999) {
             if (gp.monster[i].invincible == false) {
 
                 gp.playSE(5);
@@ -348,7 +370,9 @@ public class Player extends Entity{
                 }
             }
         }
-	}
+    }
+
+
 	public void checkLevelUp(){
 		if(exp >= nextLevelExp){
 			level++;
@@ -356,13 +380,11 @@ public class Player extends Entity{
 			maxLife += 2; 
 			strength++;
 			dexterity++;
-			attack = getAttack();
-			defense = getDefense();
-			
+			//attack = getAttack();
+			//defense = getDefense();
 			gp.playSE(8);
 			gp.gameState = gp.dialogState;
 			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
-			
 		}
 	}
 	

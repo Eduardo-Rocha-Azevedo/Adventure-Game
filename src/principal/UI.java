@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import entity.Entity;
+import objects.OBJ_CosmoCrystal;
 import objects.OBJ_Heart;
 
 
@@ -20,8 +21,8 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica;
-    BufferedImage heart_full, heart_half, heart_blank;
-  
+    //player images ui
+    BufferedImage heart_full, heart_half, heart_blank, cosmo_full, cosmo_blank;
     public boolean gameFinished = false;
 
     //inventory
@@ -56,6 +57,9 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;
+        Entity cosmo = new OBJ_CosmoCrystal(gp);
+        cosmo_full = cosmo.image;
+        cosmo_blank = cosmo.image2;
     }
 
     public void addMessage(String text){
@@ -128,6 +132,25 @@ public class UI {
             }
             i++;
             x += gp.tileSize;
+        }
+        //draw max cosmo crystal
+        x = (gp.tileSize/2) -5;
+        y = (int)(gp.tileSize*1.5);
+        i = 0;
+        while(i < gp.player.maxCosmo){
+            g2.drawImage(cosmo_blank, x, y, null);
+            i++;
+            x += 35; 
+        }
+
+        //draw cosmo
+        x = (gp.tileSize/2) -5;
+        y = (int)(gp.tileSize*1.5);
+        i = 0;
+        while(i < gp.player.cosmo){
+            g2.drawImage(cosmo_full, x, y, null);
+            i++;
+            x += 35; 
         }
     }
 
@@ -287,28 +310,19 @@ public class UI {
         final int lineHeight = 35;
 
         //NAME
-        g2.drawString("Level ",textX, textY);
-        textY += lineHeight;
-        g2.drawString("Life",textX, textY);
-        textY += lineHeight;
-        g2.drawString("Força",textX, textY);
-        textY += lineHeight;
-        g2.drawString("Destreza", textX, textY);
-        textY += lineHeight;
-        g2.drawString("Ataque", textX, textY);
-        textY += lineHeight;
-        g2.drawString("Defesa: ", textX, textY);
-        textY += lineHeight;
-        g2.drawString("Exp: ", textX, textY);
-        textY += lineHeight;
-        g2.drawString("Next Level: ", textX, textY);
-        textY += lineHeight;
-        g2.drawString("Coin: ", textX, textY);
-        textY += lineHeight + 20;
-        g2.drawString("Arma ", textX, textY);
-        textY += lineHeight + 15;
-        g2.drawString("Escudo", textX, textY);
-        textY += lineHeight;
+        g2.drawString("Level ",textX, textY); textY += lineHeight;
+        g2.drawString("Life",textX, textY); textY += lineHeight;
+        g2.drawString("Cosmo", textX, textY); textY += lineHeight;
+        g2.drawString("Força",textX, textY);textY += lineHeight; 
+        g2.drawString("Destreza", textX, textY); textY += lineHeight;
+        g2.drawString("Ataque", textX, textY); textY += lineHeight;
+        g2.drawString("Defesa: ", textX, textY);  textY += lineHeight;
+        g2.drawString("Exp: ", textX, textY); textY += lineHeight;
+        g2.drawString("Next Level: ", textX, textY); textY += lineHeight;
+        g2.drawString("Coin: ", textX, textY); textY += lineHeight + 10;
+        g2.drawString("Arma ", textX, textY); textY += lineHeight + 15;
+        g2.drawString("Escudo", textX, textY); textY += lineHeight;
+       
 
         //VALUE
         int tailX = (frameX + frameWidth) - 30;
@@ -322,6 +336,11 @@ public class UI {
         textY += lineHeight;
 
         value = String.valueOf(gp.player.life +" / " + gp.player.maxLife);
+        textX = getXForAlignToRightText(value, tailX);
+        g2.drawString(value, textX, textY);
+        textY += lineHeight;
+
+         value = String.valueOf(gp.player.cosmo +" / " + gp.player.maxCosmo);
         textX = getXForAlignToRightText(value, tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
@@ -361,10 +380,10 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
 
-        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY - 14, null);
+        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY - 24, null);
         textY += gp.tileSize;
 
-        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY - 14, null);
+        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY - 24, null);
        
 
     }

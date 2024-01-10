@@ -87,8 +87,9 @@ public class EventHantler {
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
             gp.playSE(2);
-            gp.ui.currentDialog = "Você bebeu água.\nSua vida foi restaurada.";
+            gp.ui.currentDialog = "Você bebeu água.\nSua vida foi restaurada e seu cosmos.";
             gp.player.life = gp.player.maxLife;
+            gp.player.cosmo = gp.player.maxCosmo;
             gp.aSetter.setMonster();
         }
     }
