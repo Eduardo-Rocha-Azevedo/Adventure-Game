@@ -173,6 +173,9 @@ public class Player extends Entity{
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			contactMonster(monsterIndex);
 
+			//CHECK INTERACTIVE TILE COLLISION
+			int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+
 			//CHECK EVENT 
 			gp.eHandler.checkEvent();
 			
@@ -265,6 +268,9 @@ public class Player extends Entity{
 			//check collision with the update worldX/Y and solidArea
 			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
 			damageMonster(monsterIndex, attack);
+
+			int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+			damageInteractiveTile(iTileIndex);
 
 			//After attack, reset player's worldX/Y and solidArea
 			worldX = currentWorldX;
@@ -372,12 +378,25 @@ public class Player extends Entity{
         }
     }
 
+	public void damageInteractiveTile(int i){
+		if( i != 999 && gp.iTile[i].destructible == true && gp.iTile[i].isCorrectItem(this) == true && gp.iTile[i].invincible == false){
+			gp.iTile[i].playSE();
+			gp.iTile[i].life--;
+			gp.iTile[i].invincible = true;
+
+			if(gp.iTile[i].life == 0){
+				gp.iTile[i] = gp.iTile[i].getDestroyedForm();
+			}
+		}
+	}
 
 	public void checkLevelUp(){
 		if(exp >= nextLevelExp){
 			level++;
+			cosmo++;
 			nextLevelExp = nextLevelExp *5;
 			maxLife += 2; 
+			maxCosmo++;
 			strength++;
 			dexterity++;
 			//attack = getAttack();
