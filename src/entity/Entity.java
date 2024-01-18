@@ -52,7 +52,8 @@ public class Entity {
 	int dialogIndex = 0;
 
 	//CHARACTER STATUS
-	public int maxLife;
+	public int 
+	maxLife;
 	public int life;
 	
 	public String name;
@@ -323,5 +324,42 @@ public class Entity {
         }
         return image;
     }
+
+	// Particles configs
+	public Color getParticlesColor(){
+        Color color = null;
+        return color;
+    }
+
+    public int getParticlesSize(){
+        int size = 0;
+        return size;
+    }
+
+    public int getParticlesSpeed(){
+        int speed = 0;
+        return speed;
+    }
+
+    public int getParticlesMaxLife(){
+        int maxLife = 0;
+        return maxLife;
+    }
+
+	public void generateParticle(Entity generator, Entity target){
+		Color color = generator.getParticlesColor();
+		int size = generator.getParticlesSize();
+		int speed = generator.getParticlesSpeed();
+		int maxLife = generator.getParticlesMaxLife();
+
+		Particle p1 = new Particle(gp, target, color, size, speed, maxLife, -2, -1);
+		Particle p2 = new Particle(gp, target, color, size, speed, maxLife, 2, -1);
+		Particle p3 = new Particle(gp, target, color, size, speed, maxLife, -2, 1);
+		Particle p4 = new Particle(gp, target, color, size, speed, maxLife, 2, 1);
+		gp.particleList.add(p1);
+		gp.particleList.add(p2);
+		gp.particleList.add(p3);
+		gp.particleList.add(p4);
+	}
 }
 

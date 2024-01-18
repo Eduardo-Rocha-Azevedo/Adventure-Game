@@ -1,5 +1,7 @@
 package objects;
 
+import java.awt.Color;
+
 import entity.Entity;
 import entity.Projectile;
 import principal.GamePanel;
@@ -42,5 +44,25 @@ public class OBJ_Fireball extends Projectile{
 
     public void substracResource(Entity user){
         user.cosmo -= useCost;
+    }
+
+    public Color getParticlesColor(){
+        Color color = new Color(0,71,171);
+        return color;
+    }
+
+    public int getParticlesSize(){
+        int size = 7;
+        return size;
+    }
+
+    public int getParticlesSpeed(){
+        int speed = 1;
+        return speed;
+    }
+
+    public int getParticlesMaxLife(){
+        int maxLife = 20;
+        return maxLife;
     }
 }

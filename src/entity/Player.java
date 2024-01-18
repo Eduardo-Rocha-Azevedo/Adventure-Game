@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import objects.OBJ_Axe;
 import objects.OBJ_Fireball;
 import objects.OBJ_Shield_Wood;
 import objects.OBJ_Sword_Normal;
@@ -69,7 +70,7 @@ public class Player extends Entity{
 		
 		//ITEMS
 	
-		currentWeapon = new OBJ_Sword_Normal(gp);
+		currentWeapon = new OBJ_Axe(gp);
         currentShield = new OBJ_Shield_Wood(gp);
 		projectile = new OBJ_Fireball(gp);
 		attack = getAttack(); //the total attack value is decided by strength and Weapon
@@ -384,6 +385,7 @@ public class Player extends Entity{
 			gp.iTile[i].life--;
 			gp.iTile[i].invincible = true;
 
+			generateParticle(gp.iTile[i], gp.iTile[i]);
 			if(gp.iTile[i].life == 0){
 				gp.iTile[i] = gp.iTile[i].getDestroyedForm();
 			}
