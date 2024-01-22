@@ -9,10 +9,15 @@ public class Main {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("Ancient Ruin");
-        window.setUndecorated(true);
+        
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
+
+        gamePanel.config.loadConfig();
+        if(gamePanel.fullScreen == true){
+           window.setUndecorated(true);
+        } 
 
         window.pack();
 
