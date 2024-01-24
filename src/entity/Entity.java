@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -72,12 +73,15 @@ public class Entity {
 	public Entity currentWeapon;
 	public Entity currentShield;
 	public Projectile projectile;
+	public ArrayList <Entity> inventory = new ArrayList<>();
+	public final int maxInventorySize = 20;
 
 	// ITEM ATTRIBUTES
 	public int attackValue;
 	public int defenseValue;
 	public String description = "";
 	public int useCost;
+	public int price;
 	// TYPE
 	public int type; 
 	public final int type_player = 0;
@@ -105,7 +109,13 @@ public class Entity {
 	public void setAction(){}
 
 	public void damageReaction(){}
-	public void speak(){}
+	public void speak(){
+		if(dialogues[dialogIndex] == null){
+			dialogIndex = 0;
+		}
+		gp.ui.currentDialog = dialogues[dialogIndex];
+		dialogIndex++;
+	}
 	public void use(Entity e){}
 	public void checkDrop(){}
 	public void dropItem(Entity droppedItem){
@@ -145,7 +155,7 @@ public class Entity {
 		}
 		
 		spriteCouter++;
-		if(spriteCouter > 12){
+		if(spriteCouter > 24){
 			if(spriteNum == 1){
 				spriteNum = 2;
 			}

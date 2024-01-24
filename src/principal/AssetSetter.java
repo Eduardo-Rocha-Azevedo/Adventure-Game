@@ -1,5 +1,6 @@
 package principal;
 
+import entity.NPC_Merchant;
 import entity.NPC_Old_man;
 import objects.OBJ_Coin_gold;
 import objects.OBJ_Door;
@@ -38,11 +39,22 @@ public class AssetSetter {
     }
 
     public void setNPC(){
+        
+        //MAP 0 (main)===================================
         int mapNum = 0;
         int i = 0;
         gp.npc[mapNum][i] = new NPC_Old_man(gp);
         gp.npc[mapNum][i].worldX = gp.tileSize*21;
         gp.npc[mapNum][i].worldY = gp.tileSize*21; 
+        i++;
+
+        //MAP 1 (shop)===================================
+        mapNum = 1;
+        i = 0;
+        gp.npc[mapNum][i] = new NPC_Merchant(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize*12;
+        gp.npc[mapNum][i].worldY = gp.tileSize*7; 
+        i++;
 
     }
 
