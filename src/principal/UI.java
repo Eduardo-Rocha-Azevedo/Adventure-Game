@@ -425,16 +425,18 @@ public class UI {
         int frameHeight = 0;
         int slotCol = 0;
         int slotRow = 0;
-
-     
-        if(entity == npc){
-            frameX = gp.tileSize*2;
+       
+       if(entity == npc) {
+       
+            //FRAME
+            frameX = gp.tileSize * 2;
             frameY = gp.tileSize;
-            frameWidth = gp.tileSize*6;
-            frameHeight = gp.tileSize*5;
+            frameWidth = gp.tileSize * 6;
+            frameHeight = gp.tileSize * 5;
             slotCol = npcSlotCol;
             slotRow = npcSlotRow;
         }
+
         //Create a frame
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
         drawPlayerInventory();
@@ -448,18 +450,29 @@ public class UI {
 
 
         //Draw player's items
-        for (int i = 0; i < entity.inventory.size(); i++) {
-            // EQUIP CURSOR
-            if (entity.inventory.get(i) == entity.currentWeapon ||
-                entity.inventory.get(i) == entity.currentShield) {
-
-                g2.setColor(new Color(240, 190, 90));
-                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
-            }
-        
-
-            g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
-            slotX += slotSize;
+        //SLOT
+        final int slotXstart = frameX + 20;
+        final int slotYstart = frameY + 20;
+        slotX = slotXstart;
+        slotY = slotYstart;
+        slotSize = gp.tileSize + 3;
+ 
+ 
+         //DRAW PLAYER'S ITEMS
+         for(int i = 0; i < entity.inventory.size(); i++)
+         {
+ 
+             //EQUIP CURSOR
+             if(entity.inventory.get(i) == entity.currentWeapon ||
+                     entity.inventory.get(i) == entity.currentShield)
+             {
+                 g2.setColor(new Color(240,190,90));
+                 g2.fillRoundRect(slotX,slotY, gp.tileSize, gp.tileSize,10,10 );
+             }
+ 
+             g2.drawImage(entity.inventory.get(i).down1, slotX,slotY,null);  //draw item
+ 
+             slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXStart;
@@ -915,9 +928,9 @@ public class UI {
         }
     } 
     public void trade_buy(){
-        // DRAW PLAYER INVENTORY
+        //*  DRAW PLAYER INVENTORY
         drawInventory(gp.player, false);
-        // DRAW NPC INVENTORY
+        //*  DRAW NPC INVENTORY
         drawInventory(npc, true);
 
         //Draw hint window

@@ -25,7 +25,7 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*33;
         gp.obj[mapNum][i].worldY = gp.tileSize*22;
         i++;
-        // Blue Shield ===================================
+        /*  Blue Shield ===================================
         gp.obj[mapNum][i] = new objects.OBJ_Shield_Blue(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*35;
         gp.obj[mapNum][i].worldY = gp.tileSize*21;
@@ -34,7 +34,7 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new objects.OBJ_Potion_Red(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*22;
         gp.obj[mapNum][i].worldY = gp.tileSize*27;
-        i++;
+        i++; */
       
     }
 

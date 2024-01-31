@@ -14,6 +14,7 @@ import principal.GamePanel;
 import principal.UtiliyTool;
 
 
+
 public class Entity {
 	public GamePanel gp;
 
