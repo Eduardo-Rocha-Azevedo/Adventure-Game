@@ -9,18 +9,19 @@ import principal.GamePanel;
 public class NPC_Old_man extends Entity {
     
     public NPC_Old_man(GamePanel gp){
-    	 super(gp);
-         direction = "down";
-         speed = 1;
+    	super(gp);
+        direction = "down";
+        speed = 1;
 
-         solidArea = new Rectangle();
-         solidArea.x = 8;
-         solidArea.y = 16;
-         solidArea.width = 32;
-         solidArea.height = 32;
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+	    solidArea.y = 16;
+		solidAreaDefultX = solidArea.x;
+        solidAreaDefultY = solidArea.y;
+        solidArea.width = 30;
+        solidArea.height = 30;
 
-         solidAreaDefultX = 8;
-         solidAreaDefultY = 16;
+      
 
         // dialogueSet = -1; //For first dialogueSet(= 0)
 
@@ -49,31 +50,41 @@ public class NPC_Old_man extends Entity {
 
 	//IA
 	public void setAction(){
-		actionLockCounter++;
+		if(onPath ){
+			int goalCol = 12;
+			int goalRow = 9;
 
-		if(actionLockCounter == 120){
-			
-			Random random = new Random();
-			int i = random.nextInt(100)+1; // pick up a number from  1 to 100
-
-			if(i <= 25){
-				direction = "up";
-			}
-			if(i > 25 && i <= 50){
-				direction = "down";
-			}
-			if(i > 50 && i <= 75){
-				direction = "left";
-			}
-			if(i > 75 && i <= 100){
-				direction = "right";
-			}
-
-			actionLockCounter = 0;
+			searchPath(goalCol, goalRow);
 		}
+		else{
+			actionLockCounter++;
+
+			if(actionLockCounter == 120){
+				
+				Random random = new Random();
+				int i = random.nextInt(100)+1; // pick up a number from  1 to 100
+
+				if(i <= 25){
+					direction = "up";
+				}
+				if(i > 25 && i <= 50){
+					direction = "down";
+				}
+				if(i > 50 && i <= 75){
+					direction = "left";
+				}
+				if(i > 75 && i <= 100){
+					direction = "right";
+				}
+
+				actionLockCounter = 0;
+			}
+		}
+		
 	}
 
 	public void speak(){
+		
 		if(dialogues[dialogIndex] == null){
 			dialogIndex = 0;
 		}
@@ -81,19 +92,12 @@ public class NPC_Old_man extends Entity {
 		dialogIndex++;
 
 		switch(gp.player.direction){
-			case "up":
-			direction = "down";
-			break;
-			case "down":
-			direction = "up";
-			break;
-			case "left":
-			direction = "right";
-			break;
-			case "right":
-			direction = "left";
-			break;
+			case "up":direction = "down";break;
+			case "down":direction = "up";break;
+			case "left":direction = "right";break;
+			case "right":direction = "left";break;
 
 		}
+		onPath = true;
 	}
 }

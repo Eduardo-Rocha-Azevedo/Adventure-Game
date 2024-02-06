@@ -38,7 +38,7 @@ public class Particle extends Entity {
         worldX += xd * speed;
         worldY += yd * speed;
 
-        if(life == 0){
+        if(life <= 0){
             alive = false;
         }
     }
