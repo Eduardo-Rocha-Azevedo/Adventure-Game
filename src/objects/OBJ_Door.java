@@ -6,8 +6,10 @@ import principal.GamePanel;
 
 public class OBJ_Door extends Entity {
 
+    GamePanel gp;
     public OBJ_Door(GamePanel gp){
         super(gp);
+        this.gp = gp;
         name = "Door";
         down1 = setup("/objects/door", gp.tileSize, gp.tileSize);
         collision = true;
@@ -17,5 +19,11 @@ public class OBJ_Door extends Entity {
         solidArea.height = 32;
         solidAreaDefultX = solidArea.x;
         solidAreaDefultY = solidArea.y;
+        type = type_obstacle;
+    }
+
+    public void interact(){
+        gp.gameState = gp.dialogState;
+        gp.ui.currentDialog = "Você precisa de uma chave!";
     }
 }

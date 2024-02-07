@@ -16,14 +16,16 @@ public class OBJ_Potion_Red extends Entity {
         down1 = setup("/objects/potion_red",gp.tileSize,gp.tileSize);
         description  = "["+name+"]\n"+"Cura sua vida.";
         price = 25;
+        stackable = true;
     }
 
-    public void use(Entity e){
+    public boolean use(Entity e){
         gp.gameState = gp.dialogState;
         gp.ui.currentDialog ="Você bebeu "+name+" !\n" 
         +"Sua vida foi recuperada.";
         e.life += value;
       
         gp.playSE(2);
+        return true;
     }
 }

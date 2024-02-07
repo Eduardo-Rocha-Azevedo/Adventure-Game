@@ -15,7 +15,8 @@ public class MON_GreenSlime extends Entity{
 
         type = type_monster;
         name = "Slime Verde";
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         maxLife = 4;
         life = maxLife;
         projectile = new OBJ_Rock(gp);
@@ -44,42 +45,77 @@ public class MON_GreenSlime extends Entity{
         right2 = setup("/monster/greenslime_down_2", gp.tileSize, gp.tileSize);
     }
 
-    //IA simple
+    public void update(){
+        super.update();
+        int xDistance = Math.abs(worldX - gp.player.worldX);
+        int yDistance = Math.abs(worldY - gp.player.worldY);
+        int tileDistance = (xDistance + yDistance)/gp.tileSize;
+
+        if(onPath == false && tileDistance < 5){
+            int i = new Random().nextInt(100)+1;
+            if(i>50){
+                onPath = true;  
+            }
+        }
+        if(onPath == true && tileDistance > 10){
+            onPath = false;
+        } 
+    }
+
+    //IA A* PathFinder
     public void setAction(){
-        actionLockCounter++;
-       
-		if(actionLockCounter == 120){
-			 Random random = new Random();
+        if(onPath ){
 			
-			int i = random.nextInt(100)+1; // pick up a number from  1 to 100
+			int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;// para seguir o player
+			int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
+			searchPath(goalCol, goalRow);
 
-			if(i <= 25){
-				direction = "up";
-			}
-			if(i > 25 && i <= 50){
-				direction = "down";
-			}
-			if(i > 50 && i <= 75){
-				direction = "left";
-			}
-			if(i > 75 && i <= 100){
-				direction = "right";
-			}
-
-			actionLockCounter = 0;
-		}
-        int i = new Random().nextInt(100)+1; // pick up a number from  1 to 100
-        if(i > 99 && projectile.alive == false && shotAvailabelCounter == 30){
+            int i = new Random().nextInt(200)+1; // pick up a number from  1 to 100
+            if(i > 197 && projectile.alive == false && shotAvailabelCounter == 30){
             projectile.set(worldX, worldY, direction, true, this);
-            gp.projectileList.add(projectile);
+            //gp.projectileList.add(projectile);
+
+            //Check vacancy
+            for(int j = 0; j < gp.projectile[1].length; j++){
+                if(gp.projectile[gp.currentMap][j] == null){
+                    gp.projectile[gp.currentMap][j] = projectile;
+                    break;
+                }
+            }
             shotAvailabelCounter = 0;
         }
+		}
+		else{
+			actionLockCounter++;
+
+			if(actionLockCounter == 120){
+				
+				Random random = new Random();
+				int i = random.nextInt(100)+1; // pick up a number from  1 to 100
+
+				if(i <= 25){
+					direction = "up";
+				}
+				if(i > 25 && i <= 50){
+					direction = "down";
+				}
+				if(i > 50 && i <= 75){
+					direction = "left";
+				}
+				if(i > 75 && i <= 100){
+					direction = "right";
+				}
+
+				actionLockCounter = 0;
+			}
+		}
+        
     }
 
     public void damageReaction(){
        actionLockCounter = 0;
-       direction = gp.player.direction;
-       
+       //direction = gp.player.direction;
+       onPath = true;
     }
 
     public void checkDrop(){

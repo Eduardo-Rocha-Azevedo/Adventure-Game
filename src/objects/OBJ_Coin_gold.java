@@ -13,10 +13,10 @@ public class OBJ_Coin_gold extends Entity {
 
     }
    
-    public void use(Entity e){
+    public boolean use(Entity e){
         gp.playSE(1);
         gp.ui.addMessage("Moeda +"+ value);
         gp.player.coin += value;
-        
+        return true;
     }
 }

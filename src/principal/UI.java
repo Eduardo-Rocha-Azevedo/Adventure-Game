@@ -471,7 +471,8 @@ public class UI {
              }
  
              g2.drawImage(entity.inventory.get(i).down1, slotX,slotY,null);  //draw item
- 
+
+           
              slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14) {
@@ -547,6 +548,24 @@ public class UI {
         
 
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
+              //Display Amount
+              if(gp.player.inventory.get(i).amout > 1){
+                g2.setFont(g2.getFont().deriveFont(32f));
+                int amoutX;
+                int amoutY;
+
+                String s = ""+ gp.player.inventory.get(i).amout;
+                amoutX = getXForAlignToRightText(s, slotX + 44);
+                amoutY = slotY + gp.tileSize;
+
+                //Shadow
+                g2.setColor(new Color(60,60,60));
+                g2.drawString(s, amoutX, amoutY);
+                //Number
+                g2.setColor(Color.white);
+                g2.drawString(s, amoutX - 3, amoutY - 3);
+             }
+ 
             slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14) {

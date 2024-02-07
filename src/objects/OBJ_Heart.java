@@ -18,10 +18,10 @@ public class OBJ_Heart extends Entity{
        
     }
 
-    public void use(Entity e){
+    public boolean use(Entity e){
         gp.playSE(1);
         gp.ui.addMessage("life +"+ value);
         e.life += value;
-        
+        return true;
     }
 }
