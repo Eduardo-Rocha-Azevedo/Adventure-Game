@@ -51,9 +51,9 @@ public class EventHantler {
         if(canTouchEvent == true){
             if(hit(0,27,16,"right") == true) {damagePit(gp.dialogState);}
             else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
-            else if(hit(0, 10, 39,"any")== true) {teleport(1, 12,13);}
-            else if(hit(1, 12, 13,"any")== true) {teleport(0, 10,39);}
-            else if(hit(1,12,9,"any") == true){speak(gp.npc[1][0]);}
+            else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,40);}
+            else if(hit(1, 10, 40,"any")== true) {teleport(0, 10,39);}
+            else if(hit(1,10,36,"any") == true){speak(gp.npc[1][0]);}
         }
        
     }
@@ -117,6 +117,7 @@ public class EventHantler {
    
         canTouchEvent = false;
         gp.playSE(14);
+        gp.aSetter.setMonster();
     }
 
     public void speak(Entity e){

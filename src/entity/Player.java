@@ -8,9 +8,7 @@ import java.util.ArrayList;
 
 import objects.OBJ_Axe;
 import objects.OBJ_Fireball;
-import objects.OBJ_Key;
 import objects.OBJ_Shield_Wood;
-import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
 import principal.KeyHandler;
 
@@ -23,7 +21,7 @@ public class Player extends Entity{
 	public final int screenY;
 	int standCounter = 0;
 	public boolean attackCanceled = false;
-	public ArrayList <Entity> inventory = new ArrayList<>();
+	public boolean lightUpdated = false;
 	public final int maxInventorySize = 20;
 
 	public Player(GamePanel gp, KeyHandler keyH) {
@@ -479,6 +477,15 @@ public class Player extends Entity{
 			if(selectedItem.type == type_shield){
 				currentShield = selectedItem;
 				defense = getDefense();
+			}
+			if(selectedItem.type == type_light){
+				if(currentLight == selectedItem){
+					currentLight = null;
+				}
+				else{
+					currentLight = selectedItem;
+				}
+				lightUpdated= true;
 			}
 			if(selectedItem.type == type_consumable){
 				if(selectedItem.use(this) == true){

@@ -72,6 +72,7 @@ public class Entity {
 	public int value;
 	public int maxCosmo;
 	public int cosmo;
+	public Entity currentLight;
 	public Entity currentWeapon;
 	public Entity currentShield;
 	public Projectile projectile;
@@ -87,6 +88,8 @@ public class Entity {
 	public int knockBackPower = 0;
 	public boolean stackable = false;
 	public int amout = 1;
+	public int lightRadius = 0;
+
 	// TYPE
 	public int type; 
 	public final int type_player = 0;
@@ -98,6 +101,7 @@ public class Entity {
 	public final int type_consumable = 6;
 	public final int type_pickOnly = 7;
 	public final int type_obstacle = 8;
+	public final int type_light = 9;
 
 	public Entity(GamePanel gp){
 		this.gp = gp;

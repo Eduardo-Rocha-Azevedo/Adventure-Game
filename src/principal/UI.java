@@ -16,8 +16,6 @@ import entity.Entity;
 import objects.OBJ_Coin_gold;
 import objects.OBJ_CosmoCrystal;
 import objects.OBJ_Heart;
-
-
 public class UI {
     GamePanel gp;
     Graphics2D g2;
@@ -418,6 +416,14 @@ public class UI {
        
 
     }
+    public void drawMerchantInvrntory(){
+        int frameX = gp.tileSize * 2;
+        int frameY = gp.tileSize;
+        int frameWidth = gp.tileSize * 6;
+        int frameHeight = gp.tileSize * 5;
+        int slotCol = npcSlotCol;
+        int slotRow = npcSlotRow;
+    }
     public void drawInventory(Entity entity, boolean cursor){
         int frameX = 0;
         int frameY = 0;
@@ -426,7 +432,16 @@ public class UI {
         int slotCol = 0;
         int slotRow = 0;
        
-       if(entity == npc) {
+        if(entity == gp.player){
+            //FRAME
+            frameX = gp.tileSize * 12;
+            frameY = gp.tileSize;
+            frameWidth = gp.tileSize * 6;
+            frameHeight = gp.tileSize * 5;
+            slotCol = playerSlotCol;
+            slotRow = playerSlotRow;
+        }
+        else{
        
             //FRAME
             frameX = gp.tileSize * 2;
@@ -541,7 +556,9 @@ public class UI {
         for (int i = 0; i < gp.player.inventory.size(); i++) {
             // EQUIP CURSOR
             if (gp.player.inventory.get(i) == gp.player.currentWeapon ||
-            gp.player.inventory.get(i) == gp.player.currentShield) {
+                gp.player.inventory.get(i) == gp.player.currentShield ||
+                gp.player.inventory.get(i) == gp.player.currentLight) {
+
                 g2.setColor(new Color(240, 190, 90));
                 g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
             }
@@ -585,7 +602,7 @@ public class UI {
             g2.setStroke(new BasicStroke(3));
             g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
 
-             /*   //Description frame
+          //Description frame
             int dFrameX = frameX;
             int dFrameY = frameY + frameHeight;
             int dFrameWidth = frameWidth;
@@ -604,7 +621,7 @@ public class UI {
                     g2.drawString(line, textX, textY);
                     textY += 30;
                 }
-            } */ 
+            } 
     }
     
     public void drawGameOverScreen(){
@@ -990,20 +1007,19 @@ public class UI {
                     currentDialog = "Moedas insufientes";
                     drawDialogScreen();
                 }
-                else if(gp.player.inventory.size() == gp.player.maxInventorySize){
-                    subState = 0;
-                    gp.gameState = gp.dialogState;
-                    currentDialog = "Inventário cheio";
-                    drawDialogScreen();
-                }
                 else{
-                    gp.player.coin -= npc.inventory.get(itemIndex).price;
-                    gp.player.inventory.add(npc.inventory.get(itemIndex));
+                    if(gp.player.canObtainItem(npc.inventory.get(itemIndex)) == true){
+                        gp.player.coin -= npc.inventory.get(itemIndex).price;
+                    }
+                    else{
+                        subState = 0;
+                        gp.gameState = gp.dialogState;
+                        currentDialog = "Inventário cheio";
+                        //drawDialogScreen();
+                    }
                 }
             }
-
         }
-
     }
     public void trade_sell(){
         //draw player inventory
@@ -1052,8 +1068,13 @@ public class UI {
                         drawDialogScreen();
                 }
                 else {
-                    gp.player.inventory.remove(itemIndex);
-                    gp.player.coin += price;
+                    if(gp.player.inventory.get(itemIndex).amout > 1){
+                        gp.player.inventory.get(itemIndex).amout--;
+                    }
+                    else{
+                        gp.player.inventory.remove(itemIndex);
+                        gp.player.coin += price;
+                    }               
                 }
             }
                 

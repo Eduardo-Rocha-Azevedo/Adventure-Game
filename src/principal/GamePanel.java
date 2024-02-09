@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import ai.PathFinder;
 import entity.Entity;
 import entity.Player;
+import environment.EnvironmentManeger;
 import tile.TileManeger;
 import tile_interactive.InteractiveTile;
 //import principal.Sound;
@@ -64,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable{
     public EventHantler eHandler = new EventHantler(this);
     Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
+    EnvironmentManeger eManeger = new EnvironmentManeger(this);
     Thread gameThread; 
 
 
@@ -107,6 +109,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
+        eManeger.setup();
        // stopMusic();
         //playMusic(12);
         
@@ -210,6 +213,7 @@ public class GamePanel extends JPanel implements Runnable{
                 iTile[currentMap][i].update();
             }
         }
+        eManeger.update();
       }
       if(gameState == pauseState) {
        //nothing yet
@@ -232,70 +236,74 @@ public class GamePanel extends JPanel implements Runnable{
  
          //OTHERS
          else{
-             //TILE
-             tileM.draw(g2);
+            //TILE
+            tileM.draw(g2);
              
-             //INTERACTIVE TILE
-             for(int i = 0; i < iTile[1].length; i++){
-                 if(iTile[currentMap][i] != null){
-                     iTile[currentMap][i].draw(g2);
-                 }
-             }   
+            //INTERACTIVE TILE
+            for(int i = 0; i < iTile[1].length; i++){
+                if(iTile[currentMap][i] != null){
+                    iTile[currentMap][i].draw(g2);
+                }
+            }   
  
-             // Add entities to the list
-             entityList.add(player);
+            // Add entities to the list
+            entityList.add(player);
  
-             //npc
-             for(int i = 0; i < npc[1].length; i++){
-                 if(npc[currentMap][i] != null){
-                     entityList.add(npc[currentMap][i]);
-                 }
-             }
-             //obj
-             for(int i = 0; i < obj[1].length; i++){
-                 if(obj[currentMap][i] != null){
-                     entityList.add(obj[currentMap][i]);
-                 }
-             }
-             //monster
-             for(int i = 0; i < monster[1].length; i++){
-                 if(monster[currentMap][i] != null){
-                     entityList.add(monster[currentMap][i]);
-                 }
-             }
+            //npc
+            for(int i = 0; i < npc[1].length; i++){
+                if(npc[currentMap][i] != null){
+                    entityList.add(npc[currentMap][i]);
+                }
+            }
+            //obj
+            for(int i = 0; i < obj[1].length; i++){
+                if(obj[currentMap][i] != null){
+                    entityList.add(obj[currentMap][i]);
+                }
+            }
+            //monster
+            for(int i = 0; i < monster[1].length; i++){
+                if(monster[currentMap][i] != null){
+                    entityList.add(monster[currentMap][i]);
+                }
+            }
  
-             //projectile
-             for(int i = 0; i < projectile[1].length; i++){
-                 if(projectile[currentMap][i] != null){
-                     entityList.add(projectile[currentMap][i]);
-                 }
-             }
+            //projectile
+            for(int i = 0; i < projectile[1].length; i++){
+                if(projectile[currentMap][i] != null){
+                    entityList.add(projectile[currentMap][i]);
+                }
+            }
  
-             //particle
-             for(int i = 0; i < particleList.size(); i++){
-                 if(particleList.get(i) != null){
-                     entityList.add(particleList.get(i));
-                 }
-             }
+            //particle
+            for(int i = 0; i < particleList.size(); i++){
+                if(particleList.get(i) != null){
+                    entityList.add(particleList.get(i));
+                }
+            }
  
-             //sort
-             Collections.sort(entityList, new Comparator<Entity>() {
-                 @Override
-                 public int compare(Entity e1, Entity e2) {
-                     int result = Integer.compare(e1.worldX, e2.worldY);
-                     return  result;
-                 }
-             });
+            //sort
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare(e1.worldX, e2.worldY);
+                    return  result;
+                }
+            });
  
-             //draw entities
-             for(int i = 0; i < entityList.size(); i++){
-                 entityList.get(i).draw(g2);
-             }
+            //draw entities
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.get(i).draw(g2);
+            }
  
-             //empty list
-             entityList.clear();
-             //UI
-             ui.draw(g2);
+            //empty list
+            entityList.clear();
+
+            //Environment
+            eManeger.draw(g2);
+
+            //UI
+            ui.draw(g2);
          }
         
  
