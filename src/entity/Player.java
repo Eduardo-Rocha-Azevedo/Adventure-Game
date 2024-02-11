@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import objects.OBJ_Axe;
 import objects.OBJ_Fireball;
+import objects.OBJ_Key;
+import objects.OBJ_Lantern;
 import objects.OBJ_Shield_Wood;
 import principal.GamePanel;
 import principal.KeyHandler;
@@ -86,6 +88,10 @@ public class Player extends Entity{
 		inventory.clear();
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
+		inventory.add(new OBJ_Lantern(gp));
+		inventory.add(new OBJ_Key(gp));
+		inventory.add(new OBJ_Key(gp));
+		inventory.add(new OBJ_Key(gp));
 	
 	}
 	public void setDefultPositions(){

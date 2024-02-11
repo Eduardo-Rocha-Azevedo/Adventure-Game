@@ -20,7 +20,7 @@ public class TileManeger {
 
     public TileManeger(GamePanel gp){
         this.gp = gp; 
-        tile = new Tile[180];
+        tile = new Tile[176];
         mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap("/maps/mapV2.txt",0);
@@ -168,6 +168,44 @@ public class TileManeger {
         setup(135, "135", true);
         setup(136, "136", true);
         setup(137, "137", false);
+        setup(138, "138", false);
+        setup(139, "139", false);
+        setup(140, "140", false);
+        setup(141, "141", false);
+        setup(142, "142", false);
+        setup(143, "143", false);
+        setup(144, "144", false);
+        setup(145, "145", false);
+        setup(146, "146", false);
+        setup(147, "147", false);
+        setup(148, "148", false);
+        setup(149, "149", false);
+        setup(150, "150", false);
+        setup(151, "151", true);
+        setup(152, "152", true);
+        setup(153, "153", true);
+        setup(154, "154", true);
+        setup(155, "155", false);
+        setup(156, "156", true);
+        setup(157, "157", true);
+        setup(158, "158", true);
+        setup(159, "159", true);
+        setup(160, "160", true);
+        setup(161, "161", true);
+        setup(162, "162", false);
+        setup(163, "163", false);
+        setup(164, "164", true);
+        setup(165, "165", true);
+        setup(166, "166", false);
+        setup(167, "167", true);
+        setup(168, "168", true);
+        setup(169, "169", false);
+        setup(170, "170", true);      
+        setup(171, "171", true);
+        setup(172, "172", true);
+        setup(173, "173", false);  
+        setup(174, "174", false);
+        ///setup(175, "175", false);   
     }
 
     public void setup(int index, String imageName, boolean collision ){

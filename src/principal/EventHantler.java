@@ -53,6 +53,8 @@ public class EventHantler {
             else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
             else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,40);}
             else if(hit(1, 10, 40,"any")== true) {teleport(0, 10,39);}
+            else if(hit(0, 10, 8, "any")== true) {teleport(2, 7, 41);}
+            else if(hit(2,7,41,"any") == true){teleport(0, 10, 8);}
             else if(hit(1,10,36,"any") == true){speak(gp.npc[1][0]);}
         }
        
