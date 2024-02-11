@@ -6,6 +6,7 @@ import objects.OBJ_Chest;
 import objects.OBJ_Door;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
+import objects.OBJ_Tent;
 import principal.monster.MON_GreenSlime;
 import tile_interactive.IT_DryTree;
 
@@ -43,6 +44,12 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new OBJ_Chest(gp, new OBJ_Key(gp));
         gp.obj[mapNum][i].worldX = gp.tileSize*39;
         gp.obj[mapNum][i].worldY = gp.tileSize*45;
+        i++;
+
+        //tent
+        gp.obj[mapNum][i] = new OBJ_Tent(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*21;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;
         i++;
       
     }

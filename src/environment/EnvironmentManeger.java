@@ -6,8 +6,8 @@ import principal.GamePanel;
 
 public class EnvironmentManeger {
     GamePanel gp;
-    Lighting lighting;
-
+    public Lighting lighting;
+ 
     public EnvironmentManeger(GamePanel gp){
         this.gp = gp;
     }

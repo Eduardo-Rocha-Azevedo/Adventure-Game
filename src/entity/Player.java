@@ -89,15 +89,12 @@ public class Player extends Entity{
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
 		inventory.add(new OBJ_Lantern(gp));
-		inventory.add(new OBJ_Key(gp));
-		inventory.add(new OBJ_Key(gp));
-		inventory.add(new OBJ_Key(gp));
-	
 	}
 	public void setDefultPositions(){
 		worldX = gp.tileSize * 23;
 		worldY = gp.tileSize * 21;
 		direction = "down";
+		//gp.lighting.dayState = gp.lighting.day;
 	}
 	public void retoreLifeAndCosmo(){
 		life = maxLife;
@@ -150,6 +147,16 @@ public class Player extends Entity{
             attackRight1 = setup("/player/boy_axe_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
             attackRight2 = setup("/player/boy_axe_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
         }
+	}
+	public void getSleepImage(BufferedImage image){
+		up1 = image;
+		up2 = image;
+		down1 = image;
+		down2 = image;
+		left1 = image;
+		left2 = image;
+		right1 = image;
+		right2 = image;
 	}
 	
 	public void update() {

@@ -1,7 +1,7 @@
 package principal;
 
 import entity.Entity;
-
+import java.lang.Math;
 public class EventHantler {
     GamePanel gp;
     EventRect eventRect[][][];
@@ -50,12 +50,17 @@ public class EventHantler {
 
         if(canTouchEvent == true){
             if(hit(0,27,16,"right") == true) {damagePit(gp.dialogState);}
-            else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
+            //else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
+
+            //Merchant MAP
             else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,40);}
             else if(hit(1, 10, 40,"any")== true) {teleport(0, 10,39);}
-            else if(hit(0, 10, 8, "any")== true) {teleport(2, 7, 41);}
-            else if(hit(2,7,41,"any") == true){teleport(0, 10, 8);}
             else if(hit(1,10,36,"any") == true){speak(gp.npc[1][0]);}
+
+            //Doungeon MAP
+            else if(hit(0, 10, 8, "any")== true) {teleport(2, 8, 41);}
+            else if(hit(2,7,41,"any") == true){teleport(0, 10, 8);}
+           
         }
        
     }

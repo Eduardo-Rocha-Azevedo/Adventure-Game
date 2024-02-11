@@ -19,7 +19,7 @@ import objects.OBJ_Heart;
 public class UI {
     GamePanel gp;
     Graphics2D g2;
-    Font maruMonica;
+    public Font maruMonica;
     //player images ui
     BufferedImage heart_full, heart_half, heart_blank, cosmo_full, cosmo_blank, coin;
     public boolean gameFinished = false;
@@ -130,6 +130,10 @@ public class UI {
         else if(gp.gameState == gp.tradeState){
             drawTradeScreen();
         }
+        // Sleep State
+        else if(gp.gameState == gp.sleepState){
+            drawSleepScreen();
+        }   
         
     }
     
@@ -1078,6 +1082,27 @@ public class UI {
                 }
             }
                 
+        }
+    }
+    public void drawSleepScreen(){
+        counter++;
+
+        if(counter < 120){
+            gp.eManeger.lighting.filterAlpha += 0.01f;
+            if(gp.eManeger.lighting.filterAlpha > 1f){
+                gp.eManeger.lighting.filterAlpha = 1f;
+            }
+        }
+        if(counter >= 120){
+            gp.eManeger.lighting.filterAlpha -= 0.01f;
+            if( gp.eManeger.lighting.filterAlpha <= 0f){
+                gp.eManeger.lighting.filterAlpha = 0f;
+                counter = 0;
+                gp.eManeger.lighting.dayState = gp.eManeger.lighting.day;
+                gp.eManeger.lighting.dayCounter = 0;
+                gp.gameState = gp.playState;
+                gp.player.getPlayerImage();
+            }
         }
     }
     public int getItemIndexOnSlot(int slotCol, int slotRow){
