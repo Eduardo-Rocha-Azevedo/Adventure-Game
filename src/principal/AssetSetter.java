@@ -8,6 +8,7 @@ import objects.OBJ_Key;
 import objects.OBJ_Lantern;
 import objects.OBJ_Tent;
 import principal.monster.MON_GreenSlime;
+import principal.monster.MON_Orc;
 import tile_interactive.IT_DryTree;
 
 public class AssetSetter {
@@ -75,8 +76,8 @@ public class AssetSetter {
     }
 
     public void setMonster(){
-        
-        //Slime ===================================
+        //MAP (0) INICIAL=========================>
+        //Slime =======
         int i = 0;
         int mapNum = 0;
         gp.monster[mapNum][i] = new MON_GreenSlime(gp);
@@ -108,6 +109,13 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize*37;
         gp.monster[mapNum][i].worldY = gp.tileSize*43;
         i++;
+        // ORC =================
+        gp.monster[mapNum][i] = new MON_Orc(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*12;
+        gp.monster[mapNum][i].worldY = gp.tileSize*33;
+        i++;
+        //MAP (2) DANGEON ==================================>
+
     }
 
     public void setInteractiveTile(){

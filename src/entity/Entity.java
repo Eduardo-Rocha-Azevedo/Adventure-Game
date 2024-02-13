@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -42,17 +43,19 @@ public class Entity {
 	int hpBarCounter = 0;
 	public int shotAvailabelCounter = 0;
 	int knockBackCounter = 0;
-
+	public Entity attacker;
 	//state
 	public boolean collision = false;
-	boolean attacking = false;
+	public boolean attacking = false;
 	public boolean alive = true;
 	public boolean dyain = false;
 	boolean hpBarOn = false;
 	public boolean onPath = false;
 	public boolean knockBack = false;
+	public String knockBackDirection;
 	//DIALOG
 	String dialogues[] = new String[20];
+	
 	int dialogIndex = 0;
 
 	//CHARACTER STATUS
@@ -78,6 +81,8 @@ public class Entity {
 	public Projectile projectile;
 	public ArrayList <Entity> inventory = new ArrayList<>();
 	public final int maxInventorySize = 20;
+	public int motion1_duration;
+	public int motion2_duration;
 
 	// ITEM ATTRIBUTES
 	public int attackValue;
@@ -137,6 +142,26 @@ public class Entity {
 	public int getRoW(){
 		return (worldY + solidArea.y) / gp.tileSize;
 	}
+	public int getXDistance(Entity target){
+		int xDistance = Math.abs(worldX - target.worldX);
+		return xDistance;
+	}
+	public int getYDistance(Entity target){
+		int yDistance = Math.abs(worldY - target.worldY);
+		return yDistance;
+	}
+	public int getTileDistance(Entity target){
+		int tileDistance = (getXDistance(target) + getYDistance(target))/ gp.tileSize;
+		return tileDistance;
+	}
+	public int getGoalCol(Entity target){
+		int goalCol = (target.worldX + target.solidArea.x)/gp.tileSize;// para seguir o player
+		return goalCol;
+	}
+	public int getGoalRow(Entity target){
+		int goalRow = (target.worldY + target.solidArea.y)/gp.tileSize;
+		return goalRow;
+	}
 	public void setAction(){}
 	public void damageReaction(){}
 	public void speak(){
@@ -147,7 +172,9 @@ public class Entity {
 		dialogIndex++;
 	}
 	public void interact(){}
-	public boolean use(Entity e){return false;}
+	public boolean use(Entity e){
+		return false;
+	}
 	public void checkDrop(){}
 	public void dropItem(Entity droppedItem){
 		for(int i = 0; i < gp.obj[1].length; i++){
@@ -175,13 +202,14 @@ public class Entity {
 	public void update(){
 		if(knockBack == true){
 			checkCollision();
+
 			if(collisioOn == true){
 				knockBackCounter = 0;
 				knockBack = false;
 				speed = defaultSpeed;
 			}
 			else if(collisioOn == false){
-				switch(gp.player.direction){
+				switch(knockBackDirection){
 					case "up":worldY -= speed;break;
 					case "down":worldY += speed;break;
 					case "left":worldX -= speed;break;
@@ -194,6 +222,9 @@ public class Entity {
 				knockBack = false;
 				speed = defaultSpeed;
 			}
+		}
+		else if(attacking == true){
+			attacking();
 		}
 		else {
 
@@ -208,17 +239,16 @@ public class Entity {
 					case "right":worldX += speed;break;
 				}
 			}
-		}
-		
-		spriteCouter++;
-		if(spriteCouter > 24){
-			if(spriteNum == 1){
-				spriteNum = 2;
-			}
+			spriteCouter++;
+			if(spriteCouter > 24){
+				if(spriteNum == 1){
+					spriteNum = 2;
+				}
 			else if(spriteNum == 2){
 				spriteNum = 1;
-			}
+				}
 			spriteCouter = 0;
+			}
 		}
 
 		if(invincible == true){
@@ -232,7 +262,148 @@ public class Entity {
 			shotAvailabelCounter++;
 		}
 	}
+	public void checkStopChassingOrNot(Entity target, int distance, int rate){
+		if(getTileDistance(target) > distance){
+			int i = new Random().nextInt(rate);
+			if(i == 0){
+				onPath = false;
+			} 
+		}
+	}
+	public void checkStartChasingOrNOt(Entity target, int distance, int rate){
+		if(getTileDistance(target) < distance){
+			int i = new Random().nextInt(rate);
+			if(i == 0){
+				onPath = true;
+			} 
+		}
+	}
+	public void checkShootOrNot(int rate, int shotInterval){
+ 	//Check if it shoots aprojectile
+	int i = new Random().nextInt(rate); // pick up a number from  1 to 100
+
+	 if(i == 0 && projectile.alive == false && shotAvailabelCounter == shotInterval){
+ 			projectile.set(worldX, worldY, direction, true, this);
+ 			//gp.projectileList.add(projectile);
+
+ 			//Check vacancy
+	 		for(int j = 0; j < gp.projectile[1].length; j++){
+	 			if(gp.projectile[gp.currentMap][j] == null){
+		 			gp.projectile[gp.currentMap][j] = projectile;
+		 			break;
+				}
+			}
+ 			shotAvailabelCounter = 0;
+ 		}
+	}
+	public void getRandomDirection(){
+		actionLockCounter++;
+		if(actionLockCounter == 120){
+			
+			Random random = new Random();
+			int i = random.nextInt(100)+1; // pick up a number from  1 to 100
+
+			if(i <= 25){direction = "up";}
+			if(i > 25 && i <= 50){direction = "down";}
+			if(i > 50 && i <= 75){direction = "left";}
+			if(i > 75 && i <= 100){direction = "right";}
+			actionLockCounter = 0;
+		}
+	}
+	public void attacking(){
+		spriteCouter++;
+		
+		if(spriteCouter <= motion1_duration){
+			spriteNum = 1;
+		}
+		if(spriteCouter > motion1_duration && spriteCouter <= motion2_duration){
+			spriteNum = 2;
+
+			//Save current position
+			int currentWorldX = worldX;
+			int currentWorldY = worldY;
+			int solidAreaWidth = solidArea.width;
+			int solidAreaHeight = solidArea.height;
+
+			//Adjust player's wordX/Y for the attack
+			switch(direction){
+				case "up": worldX -= attackArea.height;break;
+				case "down": worldX += attackArea.height;break;
+				case "left": worldY -= attackArea.width;break;
+				case "right": worldY += attackArea.width;break;
+			}
+			//attackArea becomes solidArea
+			solidArea.width = attackArea.width;
+			solidArea.height = attackArea.height;
+
+			if(type == type_monster){
+				if(gp.cChecker.checkPlayer(this) == true){
+					damagePlayer(attackValue);
+				}
+			}
+			else{
+				//check collision with the update worldX/Y and solidArea
+				int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+				gp.player.damageMonster(monsterIndex, this,attack, currentWeapon.knockBackPower);
+
+				int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+				gp.player.damageInteractiveTile(iTileIndex);
+
+				int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
+				gp.player.damageProjectile(projectileIndex);
+			}
 	
+			//After attack, reset player's worldX/Y and solidArea
+			worldX = currentWorldX;
+			worldY = currentWorldY;
+			solidArea.width = solidAreaWidth;
+			solidArea.height = solidAreaHeight;
+		}
+		if(spriteCouter > motion2_duration){
+			spriteNum = 1;
+			spriteCouter = 0;
+			attacking = false;
+		}
+	}
+	public void checkAttackOrNot(int rate, int straingth, int horizontal){
+		boolean targetInRate = false;
+		int xDis = getXDistance(gp.player);
+		int yDis = getYDistance(gp.player);
+
+		switch(direction){
+			case "up":
+				if(gp.player.worldY < worldY && yDis < straingth && xDis < horizontal){
+					targetInRate = true;
+				}
+				break;
+			case "down":
+				if(gp.player.worldY > worldY && yDis < straingth && xDis < horizontal){
+					targetInRate = true;
+				}
+			break;
+			case "left":
+				if(gp.player.worldX < worldX && xDis < straingth && yDis < horizontal){
+					targetInRate = true;
+				}
+				break;
+			case "right":
+				if(gp.player.worldX > worldX && xDis < straingth && yDis < horizontal){
+					targetInRate = true;
+				}
+			break;
+		}
+
+		if(targetInRate == true){
+			//Check if it initiates an attack
+			int i = new Random().nextInt(rate);
+			if(i == 0){
+				attacking = true;
+				spriteNum = 1;
+				spriteCouter = 0;
+				shotAvailabelCounter = 0;
+			}
+		}
+	}
 	public void damagePlayer(int attack){
 		if(gp.player.invincible == false){
 			//we can give damage
@@ -246,6 +417,13 @@ public class Entity {
 			gp.player.invincible = true; 
 		}
 	}
+	public void setKnockBack(Entity target, Entity attacker, int knockBackPower){
+		this.attacker = attacker;
+		target.knockBackDirection = attacker.direction;
+		target.speed += knockBackPower;
+		target.knockBack = true;
+	}
+
 	
 	public void draw(Graphics2D g2){
 		
@@ -396,22 +574,18 @@ public class Entity {
         Color color = null;
         return color;
     }
-
     public int getParticlesSize(){
         int size = 0;
         return size;
     }
-
-    public int getParticlesSpeed(){
+	public int getParticlesSpeed(){
         int speed = 0;
         return speed;
     }
-
     public int getParticlesMaxLife(){
         int maxLife = 0;
         return maxLife;
     }
-
 	public void generateParticle(Entity generator, Entity target){
 		Color color = generator.getParticlesColor();
 		int size = generator.getParticlesSize();
@@ -427,7 +601,6 @@ public class Entity {
 		gp.particleList.add(p3);
 		gp.particleList.add(p4);
 	}
-
 	public void searchPath(int goalCol , int goalRow){
 		int startCol = (worldX + solidArea.x) / gp.tileSize;
         int startRow = (worldY + solidArea.y) / gp.tileSize;

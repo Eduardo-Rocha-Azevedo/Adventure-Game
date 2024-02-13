@@ -17,6 +17,8 @@ public class OBJ_Sword_Normal extends Entity{
         description  ="["+ name+ "]\n Uma velha espada."; 
         price = 50; 
         knockBackPower = 6;
+        motion1_duration = 5;
+        motion2_duration = 25;
     }
 
 }

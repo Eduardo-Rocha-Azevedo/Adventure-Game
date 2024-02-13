@@ -10,11 +10,13 @@ public class OBJ_Axe extends Entity {
         name = "Machado";
         down1 = setup("/objects/axe", gp.tileSize, gp.tileSize);
         attackValue = 1;
-        attackArea.width = 30;
-        attackArea.height = 30;
+        attackArea.width = 36;
+        attackArea.height = 36;
         description  ="["+ name+ "]\nPode cortar algumas\nárvores.";  
         price = 75;
         knockBackPower = 4;
+        motion1_duration = 20;
+        motion2_duration = 40;
         
     }
 }

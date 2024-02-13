@@ -11,6 +11,7 @@ import objects.OBJ_Fireball;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
 import objects.OBJ_Shield_Wood;
+import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
 import principal.KeyHandler;
 
@@ -37,12 +38,13 @@ public class Player extends Entity{
 		solidArea.x = 8;
 		solidArea.y = 16;
 
-		solidAreaDefultX = solidArea.x;
-		solidAreaDefultY = solidArea.y;
-
 		solidArea.width = 32;
 		solidArea.height = 32;
-		
+		attackArea.width = 48;
+        attackArea.height = 48;
+
+		solidAreaDefultX = solidArea.x;
+		solidAreaDefultY = solidArea.y;
 		setDefultValues();
 		getPlayerImage();
 		getPlayerAttackImage();
@@ -88,7 +90,9 @@ public class Player extends Entity{
 		inventory.clear();
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
+		inventory.add(new OBJ_Sword_Normal(gp));
 		inventory.add(new OBJ_Lantern(gp));
+		inventory.add(new OBJ_Key(gp));
 	}
 	public void setDefultPositions(){
 		worldX = gp.tileSize * 23;
@@ -103,6 +107,8 @@ public class Player extends Entity{
 	}
 	public int getAttack(){
 		attackArea = currentWeapon.attackArea;
+		motion1_duration = currentWeapon.motion1_duration;
+		motion2_duration = currentWeapon.motion2_duration;
 		return attack = strength * currentWeapon.attackValue;
 	}
 
@@ -309,17 +315,23 @@ public class Player extends Entity{
 			solidArea.width = attackArea.width;
 			solidArea.height = attackArea.height;
 
-			//check collision with the update worldX/Y and solidArea
-			int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-			damageMonster(monsterIndex, attack, currentWeapon.knockBackPower);
+			if(type == type_monster){
+				if(gp.cChecker.checkPlayer(this) == true){
+					damagePlayer(attackValue);
+				}
+			}
+			else{
+				//check collision with the update worldX/Y and solidArea
+				int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
+				gp.player.damageMonster(monsterIndex, this,attack, currentWeapon.knockBackPower);
 
-			int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
-			damageInteractiveTile(iTileIndex);
+				int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
+				gp.player.damageInteractiveTile(iTileIndex);
 
-			int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
-			damageProjectile(projectileIndex);
-			 
-
+				int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
+				gp.player.damageProjectile(projectileIndex);
+			}
+	
 			//After attack, reset player's worldX/Y and solidArea
 			worldX = currentWorldX;
 			worldY = currentWorldY;
@@ -331,8 +343,6 @@ public class Player extends Entity{
 			spriteCouter = 0;
 			attacking = false;
 		}
-		
-
 	}
 
 	public void pickUpObject(int i){
@@ -399,7 +409,7 @@ public class Player extends Entity{
 		}
 	}
 	
-	public void damageMonster(int i, int attack, int knockBackPower) {
+	public void damageMonster(int i, Entity attacker,int attack, int knockBackPower) {
 
         if (i != 999) {
             if (gp.monster[gp.currentMap][i].invincible == false) {
@@ -407,7 +417,7 @@ public class Player extends Entity{
                 gp.playSE(5);
 
 				if(knockBackPower > 0){
-					knockBack(gp.monster[gp.currentMap][i], knockBackPower);
+					setKnockBack(gp.monster[gp.currentMap][i], attacker,knockBackPower);
 				}
 				
                 int damage = attack - gp.monster[gp.currentMap][i].defense;
@@ -432,12 +442,6 @@ public class Player extends Entity{
             }
         }
     }
-
-	public void knockBack(Entity entity, int knockBackPower){
-		entity.direction = direction;
-		entity.speed += knockBackPower;
-		entity.knockBack = true;
-	}
 
 	public void damageInteractiveTile(int i){
 		if( i != 999 && gp.iTile[gp.currentMap][i].destructible == true && gp.iTile[gp.currentMap][i].isCorrectItem(this) == true && gp.iTile[gp.currentMap][i].invincible == false){
