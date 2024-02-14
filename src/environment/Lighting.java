@@ -113,7 +113,7 @@ public class Lighting {
             }
         }
         if(dayState == dawn){
-            filterAlpha -= 0.0001f;
+            filterAlpha -= 0.001f;
 
             if(filterAlpha < 0){
                 filterAlpha = 0;

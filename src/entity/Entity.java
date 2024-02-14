@@ -24,7 +24,8 @@ public class Entity {
 	
 	// IMAGES CONFIGS
 	public BufferedImage up1,up2, down1, down2, left1, left2, right1, right2;
-	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+	public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2,
+	guardUp,guardDown,guardLeft,guardRight;
 	public BufferedImage image, image2, image3;
 	public String direction="down";
 
@@ -53,6 +54,7 @@ public class Entity {
 	public boolean onPath = false;
 	public boolean knockBack = false;
 	public String knockBackDirection;
+	public boolean guarding = false;
 	//DIALOG
 	String dialogues[] = new String[20];
 	
@@ -100,13 +102,14 @@ public class Entity {
 	public final int type_player = 0;
 	public final int type_npc = 1;
 	public final int type_monster = 2;
-	public final int type_sword = 3;
+	public final int type_sword_normal = 3;
 	public final int type_axe = 4;
 	public final int type_shield = 5;
 	public final int type_consumable = 6;
 	public final int type_pickOnly = 7;
 	public final int type_obstacle = 8;
 	public final int type_light = 9;
+	public final int type_sword_iron = 10;
 
 	public Entity(GamePanel gp){
 		this.gp = gp;

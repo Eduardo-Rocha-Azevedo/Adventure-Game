@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import objects.OBJ_Axe;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
+import objects.OBJ_Potion_Blue;
 import objects.OBJ_Potion_Red;
 import objects.OBJ_Shield_Blue;
 import objects.OBJ_Shield_Wood;
@@ -58,6 +59,7 @@ public class NPC_Merchant extends Entity{
         inventory.add(new OBJ_Shield_Blue(gp));
         inventory.add(new OBJ_Lantern(gp));
         inventory.add(new OBJ_Tent(gp));
+        inventory.add(new OBJ_Potion_Blue(gp));
     }
 
     public void speak(){

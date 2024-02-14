@@ -10,7 +10,9 @@ import objects.OBJ_Axe;
 import objects.OBJ_Fireball;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
+import objects.OBJ_Potion_Blue;
 import objects.OBJ_Shield_Wood;
+import objects.OBJ_Sword_Iron;
 import objects.OBJ_Sword_Normal;
 import principal.GamePanel;
 import principal.KeyHandler;
@@ -46,8 +48,8 @@ public class Player extends Entity{
 		solidAreaDefultX = solidArea.x;
 		solidAreaDefultY = solidArea.y;
 		setDefultValues();
-		getPlayerImage();
-		getPlayerAttackImage();
+		getImage();
+		getAttackImage();
 		setItems();
 		
 	}
@@ -93,6 +95,7 @@ public class Player extends Entity{
 		inventory.add(new OBJ_Sword_Normal(gp));
 		inventory.add(new OBJ_Lantern(gp));
 		inventory.add(new OBJ_Key(gp));
+		
 	}
 	public void setDefultPositions(){
 		worldX = gp.tileSize * 23;
@@ -117,7 +120,7 @@ public class Player extends Entity{
 		return defense = dexterity * currentShield.defenseValue;
 	}
 
-	public void getPlayerImage(){
+	public void getImage(){
 	
 		up1 = setup("/player/boy_up_1",gp.tileSize, gp.tileSize);
 		up2 = setup("/player/boy_up_2",gp.tileSize, gp.tileSize);
@@ -129,9 +132,9 @@ public class Player extends Entity{
 		right2 = setup("/player/boy_right_2",gp.tileSize,gp.tileSize);
 	}
 
-	public void getPlayerAttackImage(){
+	public void getAttackImage(){
 		
-        if(currentWeapon.type == type_sword){
+        if(currentWeapon.type == type_sword_normal){
         
             attackUp1 = setup("/player/boy_attack_up_1",gp.tileSize, gp.tileSize*2);         // 16x32 px
             attackUp2 = setup("/player/boy_attack_up_2",gp.tileSize, gp.tileSize*2);         // 16x32 px
@@ -142,6 +145,17 @@ public class Player extends Entity{
             attackRight1 = setup("/player/boy_attack_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
             attackRight2 = setup("/player/boy_attack_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
         }
+		else if(currentWeapon.type == type_sword_iron){
+			
+            attackUp1 = setup("/player/boy_attack2_up_1",gp.tileSize, gp.tileSize*2);         // 16x32 px
+            attackUp2 = setup("/player/boy_attack2_up_2",gp.tileSize, gp.tileSize*2);         // 16x32 px
+            attackDown1 = setup("/player/boy_attack2_down_1",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackDown2 = setup("/player/boy_attack2_down_2",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackLeft1 = setup("/player/boy_attack2_left_1",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackLeft2 = setup("/player/boy_attack2_left_2",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackRight1 = setup("/player/boy_attack2_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+            attackRight2 = setup("/player/boy_attack2_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+		}
         else if(currentWeapon.type == type_axe) {
        
             attackUp1 = setup("/player/boy_axe_up_1",gp.tileSize, gp.tileSize * 2);         // 16x32 px
@@ -153,6 +167,10 @@ public class Player extends Entity{
             attackRight1 = setup("/player/boy_axe_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
             attackRight2 = setup("/player/boy_axe_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
         }
+	}
+
+	public void getGuardImage(){
+		
 	}
 	public void getSleepImage(BufferedImage image){
 		up1 = image;
@@ -486,10 +504,10 @@ public class Player extends Entity{
 		if(itemIndex < inventory.size()){
 			Entity selectedItem = inventory.get(itemIndex);
 
-			if(selectedItem.type ==  type_sword || selectedItem.type == type_axe){
+			if(selectedItem.type ==  type_sword_normal || selectedItem.type ==  type_sword_iron || selectedItem.type == type_axe){
 				currentWeapon = selectedItem;
 				attack = getAttack();
-				getPlayerAttackImage();
+				getAttackImage();
 			}
 			if(selectedItem.type == type_shield){
 				currentShield = selectedItem;
