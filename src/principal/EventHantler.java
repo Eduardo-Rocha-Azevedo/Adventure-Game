@@ -50,7 +50,7 @@ public class EventHantler {
 
         if(canTouchEvent == true){
             if(hit(0,27,16,"right") == true) {damagePit(gp.dialogState);}
-            //else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
+            else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
 
             //Merchant MAP
             else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,40);}
@@ -107,11 +107,9 @@ public class EventHantler {
             gp.gameState = gameState;
             
             gp.playSE(2);
-            gp.ui.currentDialog = "Você bebeu água.\nSua vida foi restaurada e seu cosmos.";
-            gp.player.life = gp.player.maxLife;
-            gp.player.cosmo = gp.player.maxCosmo;
-            gp.aSetter.setMonster();
+            gp.ui.currentDialog = "Seu progresso foi salvo!";
             gp.player.attackCanceled = true;
+            gp.saveLoad.save();
         }
     }
 

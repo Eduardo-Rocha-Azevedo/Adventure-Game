@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean up,down, left, right, enterPressed, shotKeyPressed;
+    public boolean up,down, left, right, enterPressed, shotKeyPressed, spacePressed;
     boolean showDebugText = false;
     public GamePanel gp;
 
@@ -87,13 +87,13 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_ENTER){
             if(gp.ui.commandNum == 0){
                 gp.gameState = gp.playState;
-                gp.retry();
+                gp.resetGame(false);
                 gp.playMusic(12);
             }
             else if(gp.ui.commandNum == 1){
                 gp.gameState = gp.titleState;
                 gp.ui.titleScreenState = 0;
-                gp.restart();
+                gp.resetGame(true);
 
             }
         }
@@ -119,9 +119,13 @@ public class KeyHandler implements KeyListener {
             if(code == KeyEvent.VK_ENTER){
                 if(gp.ui.commandNum == 0){
                     gp.ui.titleScreenState = 1;
+                    gp.playMusic(12);
                 }
                 else if(gp.ui.commandNum == 1){
-                        //add later
+                    //load game
+                    gp.saveLoad.load();
+                    gp.gameState = gp.playState;
+                    gp.playMusic(12);
                 }
                 else if(gp.ui.commandNum == 2){
                         System.exit(0);
@@ -174,6 +178,8 @@ public class KeyHandler implements KeyListener {
         if(code == KeyEvent.VK_F){shotKeyPressed = true;}
 
         if(code == KeyEvent.VK_ENTER){enterPressed = true;}
+
+        if(code == KeyEvent.VK_SPACE){spacePressed = true;}
 
         //GAME STATE
         //characther state
@@ -388,15 +394,19 @@ public class KeyHandler implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
-        if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W) { up = false; }
+        if(code == KeyEvent.VK_W) { up = false; }
           
-        if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {down = false;  }
+        if(code == KeyEvent.VK_S) {down = false; }
     
-        if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) { left = false; }
+        if(code == KeyEvent.VK_A) { left = false; }
            
-        if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) { right = false;}
+        if(code == KeyEvent.VK_D) { right = false;}
 
         if(code == KeyEvent.VK_F){ shotKeyPressed = false; }
+
+        if(code == KeyEvent.VK_SPACE){ spacePressed = false;}
+
+        if(code == KeyEvent.VK_ENTER){ enterPressed = false;}
 
 		
 	}

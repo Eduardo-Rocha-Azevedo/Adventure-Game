@@ -23,14 +23,14 @@ public class MON_Orc extends Entity {
         this.gp = gp;
 
         type = type_monster;
-        name = "Orc";
+        name = "Ogro";
         defaultSpeed = 1;
         speed = defaultSpeed;
         maxLife = 10;
         life = maxLife;
-        attack = 8;
+        attack = 5;
         defense = 2;
-        exp = 10;
+        exp = 15;
         knockBackPower = 5;
 
         solidArea.x = 4;

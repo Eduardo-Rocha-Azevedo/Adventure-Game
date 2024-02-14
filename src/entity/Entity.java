@@ -45,6 +45,8 @@ public class Entity {
 	public int shotAvailabelCounter = 0;
 	int knockBackCounter = 0;
 	public Entity attacker;
+	public int guardCounter = 0;
+	int offBalanceCounter = 0;
 	//state
 	public boolean collision = false;
 	public boolean attacking = false;
@@ -55,6 +57,8 @@ public class Entity {
 	public boolean knockBack = false;
 	public String knockBackDirection;
 	public boolean guarding = false;
+	public boolean transparent = false;
+	public boolean offBalance = false;
 	//DIALOG
 	String dialogues[] = new String[20];
 	
@@ -89,6 +93,8 @@ public class Entity {
 	// ITEM ATTRIBUTES
 	public int attackValue;
 	public int defenseValue;
+	public Entity loot;
+    public boolean opened = false;
 	public String description = "";
 	public int useCost;
 	public int price;
@@ -258,11 +264,19 @@ public class Entity {
 			invincibleCounter++;
 			if(invincibleCounter > 30){
 				invincible = false;
+				transparent = false;
 				invincibleCounter = 0;
 			}
 		}
 		if(shotAvailabelCounter < 30){
 			shotAvailabelCounter++;
+		}
+		if(offBalance == true){
+			offBalanceCounter++;
+			if(offBalanceCounter > 60){
+				offBalance = false;
+				offBalanceCounter = 0;
+			}
 		}
 	}
 	public void checkStopChassingOrNot(Entity target, int distance, int rate){
@@ -409,16 +423,53 @@ public class Entity {
 	}
 	public void damagePlayer(int attack){
 		if(gp.player.invincible == false){
-			//we can give damage
-			gp.playSE(6);
+
 			int damage = attack - gp.player.defense;
 
-			if(damage < 0){
-				damage = 0;
+			//Get an opposite direction of thid attacker
+			String canGuardDirection = getOppositeDirection(direction);
+
+			if(gp.player.guarding == true && gp.player.direction.equals(canGuardDirection)){
+				// PARRY
+				if(gp.player.guardCounter < 10){
+					damage = 0;
+					gp.playSE(16);
+					setKnockBack(this, gp.player, knockBackPower);
+					offBalance = true;
+					spriteCouter -= 60;
+				}
+				else{
+					//Normal guard
+					damage /= 3;
+					gp.playSE(16);
+				}
+				
 			}
+			else{
+				//Not guarding we can give damage
+				gp.playSE(6);
+				if(damage < 1){
+					damage = 1;
+				}
+			}
+			if(damage != 0){
+				gp.player.transparent = true;
+				setKnockBack(gp.player, this, knockBackPower);
+			}
+
 			gp.player.life -= damage;
 			gp.player.invincible = true; 
 		}
+	}
+	public String getOppositeDirection(String direction){
+		String oppositeDirection = "";
+		switch(direction){
+			case "up": oppositeDirection = "down"; break;
+			case "down": oppositeDirection = "up"; break;
+			case "left": oppositeDirection = "right"; break;
+			case "right": oppositeDirection = "left"; break;
+		}
+		return direction;
 	}
 	public void setKnockBack(Entity target, Entity attacker, int knockBackPower){
 		this.attacker = attacker;
@@ -452,6 +503,9 @@ public class Entity {
 					if(spriteNum == 1) {image = attackUp1;}
 					if(spriteNum == 2) {image = attackUp2;}
 				}
+				if(guarding == true){
+					image = guardUp;
+				}
 				break;
 
 			case "down": 
@@ -464,6 +518,9 @@ public class Entity {
 
 						if(spriteNum == 1) {image = attackDown1;}
 						if(spriteNum == 2) {image = attackDown2;}
+					}
+					if(guarding == true){
+						image = guardDown;
 					}
 					break;
  				
@@ -478,6 +535,9 @@ public class Entity {
 						if(spriteNum == 1) {image = attackLeft1;}
 						if(spriteNum == 2) {image = attackLeft2;}
 					}
+					if(guarding == true){
+						image = guardLeft;
+					}
 					break;
 
 			case "right": 
@@ -489,6 +549,9 @@ public class Entity {
 					if(attacking == true){
 						if(spriteNum == 1) {image = attackRight1;}
 						if(spriteNum == 2) {image = attackRight2;}
+					}
+					if(guarding == true){
+						image = guardRight;
 					}
 					break;	
 		}
@@ -572,6 +635,8 @@ public class Entity {
         return image;
     }
 
+	public void setLoot(Entity loot){}
+		
 	// Particles configs
 	public Color getParticlesColor(){
         Color color = null;
@@ -676,6 +741,7 @@ public class Entity {
 			}*/	
 		}
 	}
+
 	public int getDetected(Entity user, Entity target[][], String targetName){
 		int index = 999;
 
@@ -684,10 +750,10 @@ public class Entity {
 		int nextWorldY = user.getTopY();
 
 		switch(user.direction){
-			case "up": nextWorldY = user.getTopY()-1; break;
-			case "down": nextWorldY = user.getBottomY()+1; break;
-			case "left": nextWorldX = user.getLeftX()-1; break;
-			case "right": nextWorldX = user.getRightX()+1; break;
+			case "up": nextWorldY = user.getTopY()-gp.player.speed; break;
+			case "down": nextWorldY = user.getBottomY()+gp.player.speed; break;
+			case "left": nextWorldX = user.getLeftX()-gp.player.speed; break;
+			case "right": nextWorldX = user.getRightX()+gp.player.speed; break;
 		}
 		int col = nextWorldX / gp.tileSize;
 		int row = nextWorldY / gp.tileSize;

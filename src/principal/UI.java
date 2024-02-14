@@ -884,6 +884,7 @@ public class UI {
                 gp.stopMusic();
                 gp.gameState = gp.titleState;
                 gp.ui.titleScreenState = 0;
+                gp.resetGame(true);
             }
         }
 
@@ -1101,7 +1102,7 @@ public class UI {
                 gp.eManeger.lighting.dayState = gp.eManeger.lighting.day;
                 gp.eManeger.lighting.dayCounter = 0;
                 gp.gameState = gp.playState;
-                gp.player.getPlayerImage();
+                gp.player.getImage();
             }
         }
     }

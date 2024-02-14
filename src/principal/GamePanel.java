@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import ai.PathFinder;
+import data.SaveLoad;
 import entity.Entity;
 import entity.Player;
 import environment.EnvironmentManeger;
@@ -68,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable{
     EnvironmentManeger eManeger = new EnvironmentManeger(this);
     //public Lighting lighting = new Lighting(this);
     Map map = new Map(this);
+    SaveLoad saveLoad = new SaveLoad(this);
     Thread gameThread; 
 
 
@@ -125,23 +127,20 @@ public class GamePanel extends JPanel implements Runnable{
             setFullScreen();
         }    
     }
-    public void retry(){
-        
+    public void resetGame(boolean restart){
         player.setDefultPositions();
-        player.retoreLifeAndCosmo();
+        player.retoreStatus();
         aSetter.setMonster();
         aSetter.setNPC();
-       
+
+        if(restart = true){
+            player.setDefultValues();
+            aSetter.setObject();
+            aSetter.setInteractiveTile();
+            eManeger.lighting.resetDay();
+        }  
     }
-    public void restart(){
-        player.setDefultValues();
-        player.setDefultPositions();
-        player.setItems();
-        aSetter.setMonster();
-        aSetter.setNPC();
-        aSetter.setInteractiveTile();
-        stopMusic();
-    }
+   
     public void setFullScreen() {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
