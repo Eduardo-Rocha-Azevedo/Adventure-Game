@@ -19,4 +19,13 @@ public class DataStorage implements Serializable{
     //PLAYER INVENTORY
     ArrayList<String> itemNames = new ArrayList<String>();
     ArrayList<Integer> itemAmouts = new ArrayList<Integer>();
+    int currentWeaponSlot;
+    int currentShieldSlot;
+
+    // Objects on map
+    String mapObjectNames[][];
+    int mapObjectWorldX[][];
+    int mapObjectWorldY[][];
+    String mapObjectLootNames[][];
+    boolean mapObjectOpened[][];
 }

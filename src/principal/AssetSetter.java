@@ -6,6 +6,7 @@ import objects.OBJ_Chest;
 import objects.OBJ_Door;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
+import objects.OBJ_Potion_Blue;
 import objects.OBJ_Tent;
 import principal.monster.MON_GreenSlime;
 import principal.monster.MON_Orc;
@@ -48,6 +49,19 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*39;
         gp.obj[mapNum][i].worldY = gp.tileSize*45;
         i++;
+
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Potion_Blue(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*17;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;
+        i++;
+
+        gp.obj[mapNum][i] = new OBJ_Chest(gp);
+        gp.obj[mapNum][i].setLoot(new OBJ_Tent(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*16;
+        gp.obj[mapNum][i].worldY = gp.tileSize*20;
+        i++;
+
 
         //tent
         gp.obj[mapNum][i] = new OBJ_Tent(gp);

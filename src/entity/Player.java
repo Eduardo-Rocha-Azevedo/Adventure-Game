@@ -115,6 +115,27 @@ public class Player extends Entity{
 		knockBack = false;
 		lightUpdated = true;
 	}
+	public int getCurrentWeaponSlot(){
+		int currentWeaponSlot = 0;
+		for(int i = 0; i < inventory.size(); i++){
+			if(inventory.get(i) == currentWeapon){
+				currentWeaponSlot = i;
+				break;
+			}
+		}
+		return currentWeaponSlot;
+	}
+
+	public int getCurrentShieldSlot(){
+		int currentShieldSlot = 0;
+		for(int i = 0; i < inventory.size(); i++){
+			if(inventory.get(i) == currentShield){
+				currentShieldSlot = i;
+				break;
+			}
+		}
+		return currentShieldSlot;
+	}
 	public int getAttack(){
 		attackArea = currentWeapon.attackArea;
 		motion1_duration = currentWeapon.motion1_duration;
