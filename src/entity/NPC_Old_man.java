@@ -7,26 +7,26 @@ import principal.GamePanel;
 
 
 public class NPC_Old_man extends Entity {
-    
+    GamePanel gp;
     public NPC_Old_man(GamePanel gp){
     	super(gp);
+        this.gp = gp;
+
+        type = type_npc;
         direction = "down";
         speed = 1;
 
-        solidArea = new Rectangle();
         solidArea.x = 8;
-	    solidArea.y = 16;
-		solidAreaDefultX = solidArea.x;
-        solidAreaDefultY = solidArea.y;
+        solidArea.y = 16;
         solidArea.width = 30;
         solidArea.height = 30;
+        solidAreaDefultX = solidArea.x;
+        solidAreaDefultY = solidArea.y;
 
-      
+        dialogueSet = -1;
 
-        // dialogueSet = -1; //For first dialogueSet(= 0)
-
-         getImage();
-         setDialog();
+        getImage();
+        setDialog();
     }
 
     	public void getImage(){
@@ -46,13 +46,13 @@ public class NPC_Old_man extends Entity {
 		dialogues[0][1] = "Então, você veio para esta ilha\nem busca do cristal?";
 		dialogues[0][2] = "Eu costumava ser um grande cavaleiro,\nmas agora... estou um pouco velho\npara falar de aventuras.";
 
-		dialogues[1][0] = "Existem muitos perigos nesta ilha.\nTenha cuidado!";
-		dialogues[1][1] = "Para poder ataca-los é presciso\nconcentrar sua energia.\nVocê sabe como fazer isso?";
-		dialogues[1][2] = "Se você não sabe, eu posso te ensinar.\nA base é destruir os atmos concentrando energia.";
-		dialogues[1][3] = "Boa sorte para você.";
+		dialogues[0][3] = "Existem muitos perigos nesta ilha.\nTenha cuidado!";
+		dialogues[0][4] = "Para poder ataca-los é presciso\nconcentrar sua energia.\nVocê sabe como fazer isso?";
+		dialogues[0][5] = "Se você não sabe, eu posso te ensinar.\nA base é destruir os atmos concentrando energia.";
+		dialogues[0][6] = "Boa sorte para você.";
 
-		dialogues[2][0] = "Eu me pergunto como abrir essa porta";
-
+		dialogues[1][0] = "Eu me pergunto como abrir essa porta";
+		
 
 	}
 
@@ -92,10 +92,18 @@ public class NPC_Old_man extends Entity {
 		
 	}
 
-	public void speak(){
-		getFacePlayer();
-		startDialogue(this, dialogueSet);
+	public void speak() {
+        // Do this character specific stuff
+        getFacePlayer();
+        startDialogue(this, dialogueSet);
 
+        dialogueSet++;
+        if (dialogues[dialogueSet][0] == null) {
+            //dialogueSet = 0;  reset to 0
+            dialogueSet--; // don't reset
+			
+        }
 		//onPath = true;
-	}
+       
+    }
 }

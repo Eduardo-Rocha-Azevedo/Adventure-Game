@@ -229,12 +229,12 @@ public class Entity {
 				knockBack = false;
 				speed = defaultSpeed;
 			}
-			else if(collisioOn == false){
+			else{
 				switch(knockBackDirection){
-					case "up":worldY -= speed;break;
-					case "down":worldY += speed;break;
-					case "left":worldX -= speed;break;
-					case "right":worldX += speed;break;
+					case "up":worldY -= speed;
+					case "down":worldY += speed;
+					case "left":worldX -= speed;
+					case "right":worldX += speed;
 				}
 			}
 			knockBackCounter++;
@@ -252,7 +252,7 @@ public class Entity {
 		setAction();
 		checkCollision();
 		//IF COLLISION IS FALSE, PLAYER CAN MOVE
-			if(collisioOn == false){
+			if(!collisioOn){
 				switch(direction){
 					case "up":worldY -= speed;break;
 					case "down":worldY += speed;break;
@@ -283,7 +283,7 @@ public class Entity {
 		if(shotAvailabelCounter < 30){
 			shotAvailabelCounter++;
 		}
-		if(offBalance == true){
+		if(offBalance){
 			offBalanceCounter++;
 			if(offBalanceCounter > 60){
 				offBalance = false;
