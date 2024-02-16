@@ -85,6 +85,7 @@ public class Player extends Entity{
 		getImage();
 		getAttackImage();
 		getGuardImage();
+		setDialogue();
 		setItems();
 
 	}
@@ -94,9 +95,6 @@ public class Player extends Entity{
 		inventory.clear();
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(new OBJ_Sword_Normal(gp));
-		inventory.add(new OBJ_Lantern(gp));
-		inventory.add(new OBJ_Key(gp));
 		
 	}
 	public void setDefultPositions(){
@@ -108,6 +106,7 @@ public class Player extends Entity{
 	public void retoreStatus(){
 		life = maxLife;
 		cosmo = maxCosmo;
+		speed = defaultSpeed;
 		invincible = false;
 		transparent = false;
 		attacking = false;
@@ -135,6 +134,10 @@ public class Player extends Entity{
 			}
 		}
 		return currentShieldSlot;
+	}
+
+	public void setDialogue(){
+		dialogues[0][0] = "Você está no nível " + level + "\nVocê ficou mais forte!";
 	}
 	public int getAttack(){
 		attackArea = currentWeapon.attackArea;
@@ -477,7 +480,6 @@ public class Player extends Entity{
 
 			if(i != 999){
 				attackCanceled = true;
-				gp.gameState = gp.dialogState;
 				gp.npc[gp.currentMap][i].speak();
 			}else{
 				attacking = true;
@@ -573,7 +575,8 @@ public class Player extends Entity{
 			//defense = getDefense();
 			gp.playSE(8);
 			gp.gameState = gp.dialogState;
-			gp.ui.currentDialog = "Você estava no nível " + level + "\nVocê ficou mais forte!";
+			
+			startDialogue(this, 0);
 		}
 	}
 	

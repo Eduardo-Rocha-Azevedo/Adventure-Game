@@ -47,6 +47,8 @@ public class Entity {
 	public Entity attacker;
 	public int guardCounter = 0;
 	int offBalanceCounter = 0;
+	public int dialogueSet = 0;
+
 	//state
 	public boolean collision = false;
 	public boolean attacking = false;
@@ -59,10 +61,11 @@ public class Entity {
 	public boolean guarding = false;
 	public boolean transparent = false;
 	public boolean offBalance = false;
+
 	//DIALOG
-	String dialogues[] = new String[20];
+	public String dialogues[][] = new String[20][20];
 	
-	int dialogIndex = 0;
+	public int dialogIndex = 0;
 
 	//CHARACTER STATUS
 	public int maxLife;
@@ -174,11 +177,20 @@ public class Entity {
 	public void setAction(){}
 	public void damageReaction(){}
 	public void speak(){
-		if(dialogues[dialogIndex] == null){
-			dialogIndex = 0;
+		
+	}
+	public void getFacePlayer(){
+		switch (gp.player.direction) {
+			case "up": direction = "down"; break;
+			case "down": direction = "up"; break;
+			case "left": direction = "right"; break;
+			case "right": direction = "left"; break;
 		}
-		gp.ui.currentDialog = dialogues[dialogIndex];
-		dialogIndex++;
+	}
+	public void startDialogue(Entity entity, int setNum){
+		gp.gameState = gp.dialogState;
+		gp.ui.npc = entity;
+		dialogueSet = setNum;
 	}
 	public void interact(){}
 	public boolean use(Entity e){
@@ -636,7 +648,17 @@ public class Entity {
     }
 
 	public void setLoot(Entity loot){}
-		
+	public void resetCounter(){
+		actionLockCounter = 0;
+		invincibleCounter = 0;
+		spriteCouter = 0;
+		dyainCounter = 0;
+		hpBarCounter = 0;
+		shotAvailabelCounter = 0;
+		knockBackCounter = 0;
+		guardCounter = 0;
+		offBalanceCounter = 0;
+	}
 	// Particles configs
 	public Color getParticlesColor(){
         Color color = null;

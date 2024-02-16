@@ -237,7 +237,7 @@ public class UI {
 			//MENU
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
 			
-			text = "NEW GAME";
+			text = "NEW GAME ";
 			x = getXForCenterText(text);
 			y += gp.tileSize*2;
 			g2.drawString(text, x, y);
@@ -254,7 +254,7 @@ public class UI {
 				g2.drawString(">", x - (gp.tileSize/2), y);
 			}
 			
-			text = "QUIT";
+			text = "QUIT          ";
 			x = getXForCenterText(text);
 			y += gp.tileSize;
 			g2.drawString(text, x, y);
@@ -269,33 +269,51 @@ public class UI {
 		}
 	}
     public void drawHistoryScreen() {
-       // gp.playMusic(12);
+        int x, y, width, height;
+        
+        // gp.playMusic(12);
     	g2.setColor(new Color(0,0,0));
-			g2.fillRect(0, 0, gp.screenWith, gp.screenHeight);
+		g2.fillRect(0, 0, gp.screenWith, gp.screenHeight);
 			
-			// SELECTION SCREEN
-			g2.setColor(Color.WHITE);
-			g2.setFont(g2.getFont().deriveFont(30F));
+		// SELECTION SCREEN
+		g2.setColor(Color.WHITE);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25F));
 			
-			String text = "Add history later!";
-			int x = getXForCenterText(text);
-			int y = gp.tileSize*3;
-			g2.drawString(text, x, y);
-			
-			text = "Start Game";
-			x = getXForCenterText(text);
-			y += gp.tileSize;
-			g2.drawString(text, x, y);
-			if(commandNum == 0) {
-				g2.drawString(">", x - gp.tileSize, y);
+        x = 2;
+        y = 3;
+        width = gp.tileSize*20;
+        height = gp.tileSize*12;
+        drawSubWindow(x, y, width, height-5);
+       // g2.drawString("Moeda: ", x+24, y +60);
+
+        String text = " No vasto continente de Aetheron, envolto em lendas e mistérios, erguem-se as ruínas de uma";x = getXForCenterText(text);
+		y = gp.tileSize;g2.drawString(text, x, y);
+		text = "civilização antiga, perdida no tempo. Há muito esquecida pelos habitantes modernos, estas  ";x = getXForCenterText(text);
+		y = gp.tileSize +35;g2.drawString(text, x, y);
+        text = "ruínas são um labirinto de segredos e perigos, esperando para serem explorados.               ";x = getXForCenterText(text);
+		y += 35;g2.drawString(text, x, y);
+        text = "Com uma antiga carta do seu avô, um renomado explorador que desapareceu procurando as";x = getXForCenterText(text);
+		y += 35;g2.drawString(text, x, y);
+        text = "mesmas ruínas décadas atrás, você parte em uma jornada.                                                     ";x = getXForCenterText(text);
+		y += 35;g2.drawString(text, x, y);
+
+
+        g2.setColor(Color.WHITE);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 25F));
+		text = "Iniciar Jogo";
+		x = getXForCenterText(text);
+		y += gp.tileSize*5;
+		g2.drawString(text, x, y);
+		if(commandNum == 0) {
+			g2.drawString(">", x - 18, y);
                 //gp.stopMusic();
-            }
-			text = "Go to Back";
-			x = getXForCenterText(text);
-			y += gp.tileSize*2;
-			g2.drawString(text, x, y);
-			if(commandNum == 1) {
-				g2.drawString(">", x - gp.tileSize, y);
+        }
+		text = "Voltar        ";
+		x = getXForCenterText(text);
+		y += gp.tileSize;
+		g2.drawString(text, x, y);
+		if(commandNum == 1) {
+				g2.drawString(">", x - 18, y);
                 
 			}
     }
@@ -319,6 +337,23 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 32f));
         x += gp.tileSize;
         y += gp.tileSize;
+
+        if(npc.dialogues[npc.dialogueSet][npc.dialogIndex] != null){
+            currentDialog = npc.dialogues[npc.dialogueSet][npc.dialogIndex];
+
+            if(gp.keyH.enterPressed == true){
+                if(gp.gameState == gp.dialogState){
+                    npc.dialogIndex++;
+                    gp.keyH.enterPressed = false;
+                }
+            }
+        }
+        else{
+            npc.dialogueSet = 0;
+            if(gp.gameState == gp.dialogState){
+                gp.gameState = gp.playState;
+            }
+        }
         
         for(String line:currentDialog.split("\n")) {
         	g2.drawString(line, x, y);
@@ -627,7 +662,6 @@ public class UI {
                 }
             } 
     }
-    
     public void drawGameOverScreen(){
        
         g2.setColor(new Color(0,0,0,150));

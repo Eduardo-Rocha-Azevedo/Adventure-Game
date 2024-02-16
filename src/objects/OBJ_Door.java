@@ -20,10 +20,13 @@ public class OBJ_Door extends Entity {
         solidAreaDefultX = solidArea.x;
         solidAreaDefultY = solidArea.y;
         type = type_obstacle;
+        setDialogue();
+    }
+    public void setDialogue(){
+        dialogues[0][0] = "Você precisa de uma chave!";
     }
 
     public void interact(){
-        gp.gameState = gp.dialogState;
-        gp.ui.currentDialog = "Você precisa de uma chave!";
+       startDialogue(this, 0);
     }
 }

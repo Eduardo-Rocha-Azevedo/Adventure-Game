@@ -30,28 +30,32 @@ public class OBJ_Chest extends Entity {
 
     public void setLoot(Entity loot){
         this.loot = loot;
+        setDialogue();
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "Você encontrou: " + loot.name + "!"+"\n...Mas você não tem espaço no inventário.";
+        dialogues[1][0] = "\nVocê pegou: " + loot.name + "!";
+        dialogues[2][0] = "O baú está vazio.";
     }
 
     public void interact(){
-        gp.gameState = gp.dialogState;
+        
         if(opened == false){
             gp.playSE(3);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Você encontrou: " + loot.name + "!");
 
             if(gp.player.canObtainItem(loot) == false){
-                sb.append("\n...Mas você não tem espaço no inventário.");
+                startDialogue(this, 0);
             }
             else {
-                sb.append("\nVocê pegou: " + loot.name + "!");
+                startDialogue(this, 1);
                 //gp.player.inventory.add(loot);
                 down1 = image2;
                 opened = true;
-            }
-            gp.ui.currentDialog = sb.toString();
+            }  
         }
         else{
-            gp.ui.currentDialog = "O baú está vazio.";
+            startDialogue(this, 2);
         }
     }
 }

@@ -15,12 +15,17 @@ public class OBJ_Potion_Blue extends Entity{
         description  = "[Poçaõ azul]\nRestaura seu cosmos";
         price = 25;
         stackable = true;
+        setDialogue();
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "Você bebeu "+name+" !\n" 
+        +"Seu cosmos foi recuperado.";
     }
 
     public boolean use(Entity entity){
-        gp.gameState = gp.dialogState;
-        gp.ui.currentDialog ="Você bebeu "+name+" !\n" 
-        +"Sua vida foi recuperada.";
+      
+        startDialogue(this, 0);
         entity.cosmo += value;
       
         gp.playSE(2);

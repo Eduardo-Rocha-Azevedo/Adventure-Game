@@ -17,14 +17,17 @@ public class OBJ_Potion_Red extends Entity {
         description  = "["+name+"]\n"+"Cura sua vida.";
         price = 25;
         stackable = true;
+        setDialogue();
+    }
+
+    public void setDialogue(){
+        dialogues[0][0] = "Você bebeu "+name+" !\n" 
+        +"Sua vida foi recuperada.";
     }
 
     public boolean use(Entity e){
-        gp.gameState = gp.dialogState;
-        gp.ui.currentDialog ="Você bebeu "+name+" !\n" 
-        +"Sua vida foi recuperada.";
+        startDialogue(this, 0);
         e.life += value;
-      
         gp.playSE(2);
         return true;
     }

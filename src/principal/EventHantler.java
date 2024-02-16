@@ -5,6 +5,7 @@ import java.lang.Math;
 public class EventHantler {
     GamePanel gp;
     EventRect eventRect[][][];
+    Entity eventMaster;
 
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
@@ -12,6 +13,7 @@ public class EventHantler {
 
     public EventHantler(GamePanel gp){
         this.gp = gp;
+        eventMaster  = new Entity(gp);
         eventRect = new EventRect[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
         int map = 0;
         int col = 0;
@@ -36,6 +38,12 @@ public class EventHantler {
                 }
             }
         }
+        setDialogue();
+    }
+
+    public void setDialogue(){
+        eventMaster.dialogues[0][0] = "Você caiu em um buraco";
+        eventMaster.dialogues[1][0] = "Seu progresso foi salvo!";
     }
 
     public void checkEvent(){
@@ -97,8 +105,8 @@ public class EventHantler {
         gp.gameState = gameState;
         gp.playSE(6);
         gp.ui.currentDialog = "você caiu em um buraco";
+        eventMaster.startDialogue(eventMaster, 0);
         gp.player.life--;
-        //eventRect[col][row].eventDone = true;
         canTouchEvent = false;
     }
 
@@ -107,7 +115,7 @@ public class EventHantler {
             gp.gameState = gameState;
             
             gp.playSE(2);
-            gp.ui.currentDialog = "Seu progresso foi salvo!";
+            eventMaster.startDialogue(eventMaster, 1);
             gp.player.attackCanceled = true;
             gp.saveLoad.save();
         }

@@ -42,10 +42,18 @@ public class NPC_Old_man extends Entity {
 	}
 	//Dialog
 	public void setDialog(){
-		dialogues[0] = "Olá, rapaz!";
-		dialogues[1] = "Então, você veio para esta ilha\nem busca do cristal?";
-		dialogues[2] = "Eu costumava ser um grande cavaleiro,\nmas agora... estou um pouco velho\npara falar de aventuras.";
-		dialogues[3] = "Bem, boa sorte para você.";
+		dialogues[0][0] = "Olá, rapaz!";
+		dialogues[0][1] = "Então, você veio para esta ilha\nem busca do cristal?";
+		dialogues[0][2] = "Eu costumava ser um grande cavaleiro,\nmas agora... estou um pouco velho\npara falar de aventuras.";
+
+		dialogues[1][0] = "Existem muitos perigos nesta ilha.\nTenha cuidado!";
+		dialogues[1][1] = "Para poder ataca-los é presciso\nconcentrar sua energia.\nVocê sabe como fazer isso?";
+		dialogues[1][2] = "Se você não sabe, eu posso te ensinar.\nA base é destruir os atmos concentrando energia.";
+		dialogues[1][3] = "Boa sorte para você.";
+
+		dialogues[2][0] = "Eu me pergunto como abrir essa porta";
+
+
 	}
 
 	//IA
@@ -85,20 +93,9 @@ public class NPC_Old_man extends Entity {
 	}
 
 	public void speak(){
-		
-		if(dialogues[dialogIndex] == null){
-			dialogIndex = 0;
-		}
-		gp.ui.currentDialog = dialogues[dialogIndex];
-		dialogIndex++;
+		getFacePlayer();
+		startDialogue(this, dialogueSet);
 
-		switch(gp.player.direction){
-			case "up":direction = "down";break;
-			case "down":direction = "up";break;
-			case "left":direction = "right";break;
-			case "right":direction = "left";break;
-
-		}
-		onPath = true;
+		//onPath = true;
 	}
 }

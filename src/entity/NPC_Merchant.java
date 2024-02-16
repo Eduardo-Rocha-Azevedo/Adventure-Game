@@ -47,7 +47,11 @@ public class NPC_Merchant extends Entity{
 	}
 	//Dialog
 	public void setDialogue(){
-		dialogues[0] = "Então você me encontrou!\nEu tenho algumas mercadorias.\nVocê quer negociar?";
+		dialogues[0][0] = "Então você me encontrou!\nEu tenho algumas mercadorias.\nVocê quer negociar?";
+        dialogues[1][0] = "Volte de novo! hehehe";
+        dialogues[2][0] = "Você não tem dinheiro suficiente!";
+        dialogues[3][0] = "Você não tem espaço suficiente!";
+        dialogues[4][0] = "Você não pode vender um item equipado!";
 		
 	}
     
@@ -66,7 +70,7 @@ public class NPC_Merchant extends Entity{
     }
 
     public void speak(){
-		super.speak();
+		
         gp.gameState = gp.tradeState;
         gp.ui.npc = this;
 	}
