@@ -5,10 +5,11 @@ import entity.Entity;
 import principal.GamePanel; 
 public class OBJ_Key extends Entity{
     GamePanel gp;
+    public static final String objName = "Chave";
 	public OBJ_Key(GamePanel gp){
         super(gp);
         this.gp = gp;
-        name = "Chave";
+        name = objName;
         type = type_consumable;
         down1 = setup("/objects/key", gp.tileSize, gp.tileSize);
         description  ="["+ name+ "]\nAbre uma porta.";

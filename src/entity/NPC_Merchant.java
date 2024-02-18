@@ -28,6 +28,7 @@ public class NPC_Merchant extends Entity{
 
         solidAreaDefultX = 8;
         solidAreaDefultY = 16;
+        dialogueSet = 0;
 
         getImage();
         setDialogue();
@@ -52,6 +53,7 @@ public class NPC_Merchant extends Entity{
         dialogues[2][0] = "Você não tem dinheiro suficiente!";
         dialogues[3][0] = "Você não tem espaço suficiente!";
         dialogues[4][0] = "Você não pode vender um item equipado!";
+
 		
 	}
     
@@ -73,5 +75,11 @@ public class NPC_Merchant extends Entity{
 		
         gp.gameState = gp.tradeState;
         gp.ui.npc = this;
+        dialogueSet++;
+        if (dialogues[dialogueSet][0] == null) {
+            //dialogueSet = 0;  reset to 0
+            dialogueSet--; // don't reset
+			
+        }
 	}
 }

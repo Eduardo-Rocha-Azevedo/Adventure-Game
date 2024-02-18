@@ -4,12 +4,12 @@ import entity.Entity;
 import principal.GamePanel;
 
 public class OBJ_Sword_Normal extends Entity{
-   
+    public static final String objName = "Espada normal";
     GamePanel gp;
     public OBJ_Sword_Normal(GamePanel gp){
         super(gp);
         type = type_sword_normal;
-        name = "Espada normal";
+        name = objName;
         down1 = setup("/objects/sword_normal", gp.tileSize, gp.tileSize);
         attackValue = 2;
         attackArea.width = 36;

@@ -93,7 +93,7 @@ public class Lighting {
         // Check the day state
         if(dayState == day){
             dayCounter++;
-            if(dayCounter > 2400){ // muda o tempo para  cada state 
+            if(dayCounter > 600){ // muda o tempo para  cada state 
                 dayState = dusk;
                 dayCounter = 0;
             }
@@ -110,7 +110,7 @@ public class Lighting {
         if(dayState == night){
             dayCounter++;
             
-            if(dayCounter > 2400){
+            if(dayCounter > 600){
                 dayState = dawn;
                 dayCounter = 0;
                 
@@ -127,10 +127,17 @@ public class Lighting {
     }
 
     public void draw(Graphics2D g2){
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
-        g2.drawImage(darknessFilter, 0, 0, null);
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        if(gp.currentArea == gp.outside ){
 
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
+
+        }
+        if( gp.currentArea == gp.outside || gp.currentArea == gp.dungeon ){
+            g2.drawImage(darknessFilter, 0, 0, null);
+        }
+        
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        
         //DEBUG
         String situation = "";
 

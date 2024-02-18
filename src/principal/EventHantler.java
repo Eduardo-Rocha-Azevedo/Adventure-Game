@@ -61,13 +61,15 @@ public class EventHantler {
             else if(hit(0,23,12,"up") == true) {healingPool(gp.dialogState);}
 
             //Merchant MAP
-            else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,40);}
-            else if(hit(1, 10, 40,"any")== true) {teleport(0, 10,39);}
+            else if(hit(0, 10, 39,"any")== true) {teleport(1, 10,39,gp.indoor);}
+            else if(hit(1, 10, 40,"any")== true) {teleport(0, 10,39, gp.outside);}
             else if(hit(1,10,36,"any") == true){speak(gp.npc[1][0]);}
 
             //Doungeon MAP
-            else if(hit(0, 10, 8, "any")== true) {teleport(2, 8, 41);}
-            else if(hit(2,7,41,"any") == true){teleport(0, 10, 8);}
+            else if(hit(0, 10, 8, "any")== true) {teleport(2, 8, 41,gp.dungeon);}
+            else if(hit(2,7,41,"any") == true){teleport(0, 10, 8, gp.outside);}
+            else if(hit(2,8,7,"any") == true){teleport(3, 30, 40, gp.dungeon);}
+            else if(hit(3,30,40,"any") == true){teleport(2, 8, 7, gp.dungeon);}
            
         }
        
@@ -121,16 +123,17 @@ public class EventHantler {
         }
     }
 
-    public void teleport(int map, int col, int row){
+    public void teleport(int map, int col, int row, int area){
         gp.gameState = gp.transitionState;
         gp.currentMap = map;
+        gp.nextArea = area;
         tempMap = map;
         tempCol = col;
         tempRow = row;
    
         canTouchEvent = false;
         gp.playSE(14);
-        gp.aSetter.setMonster();
+        
     }
 
     public void speak(Entity e){

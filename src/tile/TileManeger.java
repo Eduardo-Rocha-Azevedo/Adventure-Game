@@ -26,6 +26,7 @@ public class TileManeger {
         loadMap("/maps/mapV2.txt",0);
         loadMap("/maps/interior01.txt", 1);
         loadMap("/maps/dangeon1.txt", 2);
+        loadMap("/maps/dangeon2.txt", 3);
     }
 
     public void getTileImage(){

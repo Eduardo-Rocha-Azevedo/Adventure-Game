@@ -119,13 +119,13 @@ public class KeyHandler implements KeyListener {
             if(code == KeyEvent.VK_ENTER){
                 if(gp.ui.commandNum == 0){
                     gp.ui.titleScreenState = 1;
-                    gp.playMusic(12);
+                    
                 }
                 else if(gp.ui.commandNum == 1){
                     //load game
                     gp.saveLoad.load();
                     gp.gameState = gp.playState;
-                    gp.playMusic(12);
+                    gp.playMusic(0);
                 }
                 else if(gp.ui.commandNum == 2){
                         System.exit(0);
@@ -155,7 +155,7 @@ public class KeyHandler implements KeyListener {
                        gp.ui.titleScreenState = 1;
                        gp.gameState = gp.playState;
                       // gp.stopMusic(); 
-                       gp.playMusic(12);
+                       gp.playMusic(0);
                        
                     }
                     else if(gp.ui.commandNum == 1){

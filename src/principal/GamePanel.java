@@ -83,6 +83,15 @@ public class GamePanel extends JPanel implements Runnable{
     public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
+    public EntityGenerator eGenerator = new EntityGenerator(this);
+
+    //AREA 
+    public int currentArea;
+    public final int outside = 50;
+    public final int indoor = 51;
+    public final int dungeon = 52;
+    public int nextArea;
+    
 
     //GAME STATES
     public int gameState;
@@ -120,6 +129,7 @@ public class GamePanel extends JPanel implements Runnable{
         //playMusic(12);
         
         gameState = titleState;
+        currentArea = outside;
         tempScreen = new BufferedImage(screenWith, screenHeight, BufferedImage.TYPE_INT_ARGB);
         g2 = (Graphics2D)tempScreen.getGraphics();
     
@@ -359,7 +369,22 @@ public class GamePanel extends JPanel implements Runnable{
         se.setFile(i);
         se.play();
     }
-    
+    public void changeArea(){
+        if(nextArea != currentArea ){
+            stopMusic();
+            if(nextArea == outside){
+                playMusic(0);
+            }
+            if(nextArea == indoor){
+                playMusic(18);
+            }
+            if(nextArea == dungeon){
+                playMusic(19);
+            }
+        }
+        currentArea = nextArea;
+        aSetter.setMonster();
+    }
     @Override
     public void run(){  
         double drawInterval = 1000000000/FPS;

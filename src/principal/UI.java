@@ -505,7 +505,7 @@ public class UI {
 
         //Create a frame
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-        drawPlayerInventory();
+        //drawPlayerInventory();
 
         //Slot 
         final int slotXStart = frameX + 20;
@@ -537,9 +537,25 @@ public class UI {
              }
  
              g2.drawImage(entity.inventory.get(i).down1, slotX,slotY,null);  //draw item
+             //Display Amount
+                if(entity.inventory.get(i).amout > 1){
+                g2.setFont(g2.getFont().deriveFont(32f));
+                int amoutX;
+                int amoutY;
 
+                String s = ""+ entity.inventory.get(i).amout;
+                amoutX = getXForAlignToRightText(s, slotX + 44);
+                amoutY = slotY + gp.tileSize;
+
+                 //Shadow
+                g2.setColor(new Color(60,60,60));
+                g2.drawString(s, amoutX, amoutY);
+                //Number
+                g2.setColor(Color.white);
+                g2.drawString(s, amoutX - 3, amoutY - 3);
+            }
            
-             slotX += slotSize;
+            slotX += slotSize;
 
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXStart;
@@ -563,7 +579,7 @@ public class UI {
             int dFrameX = frameX;
             int dFrameY = frameY + frameHeight;
             int dFrameWidth = frameWidth;
-            int dFrameHeight = gp.tileSize*3;
+            int dFrameHeight = (gp.tileSize*3) + 10;
             
 
             //Draw description
@@ -578,10 +594,12 @@ public class UI {
                     g2.drawString(line, textX, textY);
                     textY += 30;
                 }
+                //Durability
+                //g2.drawString("Durabilidade: " + entity.inventory.get(itemIndex).durability, textX, textY);
             }
         }
     }
-    public void drawPlayerInventory(){
+   /*  public void drawPlayerInventory(){
 
         int frameX = gp.tileSize*12;
         int frameY = gp.tileSize;
@@ -616,8 +634,8 @@ public class UI {
         
 
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
-              //Display Amount
-              if(gp.player.inventory.get(i).amout > 1){
+            //Display Amount
+            if(gp.player.inventory.get(i).amout > 1){
                 g2.setFont(g2.getFont().deriveFont(32f));
                 int amoutX;
                 int amoutY;
@@ -632,7 +650,7 @@ public class UI {
                 //Number
                 g2.setColor(Color.white);
                 g2.drawString(s, amoutX - 3, amoutY - 3);
-             }
+            }
  
             slotX += slotSize;
 
@@ -673,7 +691,7 @@ public class UI {
                     textY += 30;
                 }
             } 
-    }
+    }*/
     public void drawGameOverScreen(){
        
         g2.setColor(new Color(0,0,0,150));
@@ -961,6 +979,7 @@ public class UI {
                 gp.player.worldY =   gp.tileSize * gp.eHandler.tempRow;
                 gp.eHandler.previousEventX = gp.player.worldX;
                 gp.eHandler.previousEventY = gp.player.worldY;
+                gp.changeArea();
 
             }
     } 

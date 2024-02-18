@@ -5,12 +5,13 @@ import principal.GamePanel;
 
 public class OBJ_Potion_Blue extends Entity{
     GamePanel gp;
+    public static final String objName = "Poção Azul";
     public OBJ_Potion_Blue(GamePanel gp){
         super(gp);
         this.gp = gp;
         value = 5;
         type = type_consumable;
-        name = "Poção Azul";
+        name = objName;
         down1 = setup("/objects/potion_blue",gp.tileSize,gp.tileSize);
         description  = "[Poçaõ azul]\nRestaura seu cosmos";
         price = 25;

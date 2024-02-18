@@ -6,13 +6,13 @@ import principal.GamePanel;
 public class OBJ_Potion_Red extends Entity {
 
     GamePanel gp;
-
+    public static final String objName = "Poção Vermelha";
     public OBJ_Potion_Red(GamePanel gp){
         super(gp);
         this.gp = gp;
         value = 5;
         type = type_consumable;
-        name = "Poção Vermelha";
+        name = objName;
         down1 = setup("/objects/potion_red",gp.tileSize,gp.tileSize);
         description  = "["+name+"]\n"+"Cura sua vida.";
         price = 25;

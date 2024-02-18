@@ -11,6 +11,7 @@ import objects.OBJ_Axe;
 import objects.OBJ_Fireball;
 import objects.OBJ_Key;
 import objects.OBJ_Lantern;
+import objects.OBJ_Pickaxe;
 import objects.OBJ_Potion_Blue;
 import objects.OBJ_Shield_Wood;
 import objects.OBJ_Sword_Iron;
@@ -53,10 +54,10 @@ public class Player extends Entity{
 	
 	public void setDefultValues() {
 		
-		worldX = gp.tileSize * 23;
-		worldY = gp.tileSize * 21;
-		//worldX = gp.tileSize * 12;
-		//worldY = gp.tileSize * 9;
+		//worldX = gp.tileSize * 23;
+		//worldY = gp.tileSize * 21;
+		worldX = gp.tileSize * 11;
+		worldY = gp.tileSize * 8;
 
 		defaultSpeed = 4;
 		speed = defaultSpeed;
@@ -95,6 +96,8 @@ public class Player extends Entity{
 		inventory.clear();
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
+		inventory.add(new OBJ_Pickaxe(gp));
+		inventory.add(new OBJ_Lantern(gp));
 		
 	}
 	public void setDefultPositions(){
@@ -198,6 +201,18 @@ public class Player extends Entity{
             attackRight1 = setup("/player/boy_axe_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
             attackRight2 = setup("/player/boy_axe_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
         }
+		else if(currentWeapon.type == type_pickaxe) {
+       
+            attackUp1 = setup("/player/boy_pick_up_1",gp.tileSize, gp.tileSize * 2);         // 16x32 px
+            attackUp2 = setup("/player/boy_pick_up_2",gp.tileSize, gp.tileSize * 2);         // 16x32 px
+            attackDown1 = setup("/player/boy_pick_down_1",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackDown2 = setup("/player/boy_pick_down_2",gp.tileSize, gp.tileSize * 2);     // 16x32 px
+            attackLeft1 = setup("/player/boy_pick_left_1",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackLeft2 = setup("/player/boy_pick_left_2",gp.tileSize * 2, gp.tileSize);      // 32x16 px
+            attackRight1 = setup("/player/boy_pick_right_1",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+            attackRight2 = setup("/player/boy_pick_right_2",gp.tileSize * 2, gp.tileSize);    // 32x16 px
+        }
+
 	}
 
 	public void getGuardImage(){
@@ -309,6 +324,7 @@ public class Player extends Entity{
 				gp.playSE(7);
 				attacking = true;
 				spriteCouter = 0;
+				
 			}
 
 			attackCanceled = false;
@@ -575,7 +591,7 @@ public class Player extends Entity{
 			//defense = getDefense();
 			gp.playSE(8);
 			gp.gameState = gp.dialogState;
-			
+			setDialogue();
 			startDialogue(this, 0);
 		}
 	}
@@ -585,7 +601,7 @@ public class Player extends Entity{
 		if(itemIndex < inventory.size()){
 			Entity selectedItem = inventory.get(itemIndex);
 
-			if(selectedItem.type ==  type_sword_normal || selectedItem.type ==  type_sword_iron || selectedItem.type == type_axe){
+			if(selectedItem.type ==  type_sword_normal || selectedItem.type ==  type_sword_iron || selectedItem.type == type_axe || selectedItem.type == type_pickaxe){
 				currentWeapon = selectedItem;
 				attack = getAttack();
 				getAttackImage();
@@ -628,10 +644,11 @@ public class Player extends Entity{
 	}
 	public boolean canObtainItem(Entity item){
 		boolean canObtain = false;
+		Entity newItem = gp.eGenerator.getObject(item.name);
 
 		// CHECK IF STACKABLE
-		if(item.stackable == true){
-			int index = searchItemInventory(item.name);
+		if(newItem.stackable == true){
+			int index = searchItemInventory(newItem.name);
 
 			if(index != 999){
 				inventory.get(index).amout++;
@@ -639,14 +656,14 @@ public class Player extends Entity{
 			}
 			else { //New item so need to check vacancy
 				if(inventory.size() != maxInventorySize){
-					inventory.add(item);
+					inventory.add(newItem);
 					canObtain = true;
 				}
 			}
 		}
 		else { // NOT STACKABLE so check vacancy
 			if(inventory.size() != maxInventorySize){
-				inventory.add(item);
+				inventory.add(newItem);
 				canObtain = true;
 			}
 		}

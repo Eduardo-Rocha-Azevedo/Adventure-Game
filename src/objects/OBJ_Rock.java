@@ -2,14 +2,14 @@ package objects;
 
 import java.awt.Color;
 
-import entity.Entity;
 import entity.Projectile;
 import principal.GamePanel;
 
 public class OBJ_Rock  extends Projectile{
+    public static final String objName = "rock";
     public OBJ_Rock(GamePanel gp){
         super(gp);
-        name = "rock"; 
+        name = objName; 
         maxLife = 50;
         speed = 5;
         life = maxLife;

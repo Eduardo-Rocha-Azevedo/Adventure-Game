@@ -8,12 +8,12 @@ import principal.GamePanel;
 
 public class OBJ_Fireball extends Projectile{
     GamePanel gp;
-
+    public static final String objName = "Fireball"; 
     public OBJ_Fireball(GamePanel gp){
         super(gp);
         this.gp = gp;
 
-        name = "Fireball";
+        name = objName;
         speed = 7;
         maxLife = 80;
         life = maxLife;

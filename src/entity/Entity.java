@@ -105,6 +105,7 @@ public class Entity {
 	public boolean stackable = false;
 	public int amout = 1;
 	public int lightRadius = 0;
+	
 
 	// TYPE
 	public int type; 
@@ -119,6 +120,7 @@ public class Entity {
 	public final int type_obstacle = 8;
 	public final int type_light = 9;
 	public final int type_sword_iron = 10;
+	public final int type_pickaxe = 11;
 
 	public Entity(GamePanel gp){
 		this.gp = gp;
