@@ -71,7 +71,7 @@ public class Player extends Entity{
 		dexterity = 1; // the more dexterity he has, the more defense
 		exp = 0;
 		nextLevelExp = 5;
-		coin = 1000;
+		coin = 250;
 		maxCosmo = 4;
 		cosmo = maxCosmo;
 		currentLight = null;
@@ -96,7 +96,6 @@ public class Player extends Entity{
 		inventory.clear();
 		inventory.add(currentWeapon);
 		inventory.add(currentShield);
-		inventory.add(new OBJ_Pickaxe(gp));
 		inventory.add(new OBJ_Lantern(gp));
 		
 	}
@@ -457,53 +456,50 @@ public class Player extends Entity{
 		}
 	}
 
-	public void pickUpObject(int i){
-		if(i != 999){
-			//PICKUP ONLY ITEMS
-			if(gp.obj[gp.currentMap][i].type == type_pickOnly){
-				gp.obj[gp.currentMap][i].use(this);
-				gp.obj[gp.currentMap][i] = null;
-			}
+	public void pickUpObject(int i) {
+        // I choose 999 but basically any number is fine as long as it's not used by
+        // the object array's index
+        if (i != 999) {
+            // PICKUP ONLY ITEMS
+            if (gp.obj[gp.currentMap][i].type == type_pickOnly) {
+                gp.obj[gp.currentMap][i].use(this);
+                gp.obj[gp.currentMap][i] = null;
+            }
+            // OBSTACLE
+            else if (gp.obj[gp.currentMap][i].type == type_obstacle) {
+                if (keyH.enterPressed) {
+                    attackCanceled = true;
+                    gp.obj[gp.currentMap][i].interact();
+                }
+            }
+           
+            // INVENTORY ITEMS
+            else {
+                String text;
 
-			//Obstacle
-			else if(gp.obj[gp.currentMap][i].type == type_obstacle){
-				if(keyH.enterPressed == true){
-					attackCanceled = true;
-					gp.obj[gp.currentMap][i].interact();
-				}
+                if (canObtainItem(gp.obj[gp.currentMap][i]) == true) {
+                    gp.playSE(1);
+                    text = "Got a " + gp.obj[gp.currentMap][i].name + "!";
+                } else {
+                    text = "You cannot carry any more!";
+                }
 
-			}
-			//INVENTRY ITEMS
-			else {
-				String text;
-				if(canObtainItem(gp.obj[gp.currentMap][i]) == true){
-					
-					gp.playSE(1);
-					text = "Pegou " + gp.obj[gp.currentMap][i].name +"!";
-				}
-				else{
-					text = "Inventário cheio!";
-				}
-				gp.ui.addMessage(text);
-				gp.obj[gp.currentMap][i] = null; // fixed don't forget this 
-			}
-		}
-	}
+                gp.ui.addMessage(text);
+                gp.obj[gp.currentMap][i] = null;
+            }
+        }
+    }
 
-	public void interactNPC(int i){
+	public void interactNPC(int i) {
+        if (i != 999) {
+            if (gp.keyH.enterPressed) {
+                attackCanceled = true;
+                gp.npc[gp.currentMap][i].speak();
+            }
 
-		if(gp.keyH.enterPressed == true){
-
-			if(i != 999){
-				attackCanceled = true;
-				gp.npc[gp.currentMap][i].speak();
-			}else{
-				attacking = true;
-			}
-
-		}
-	}
-
+            gp.npc[gp.currentMap][i].move(direction);
+        }
+    }
 	public void contactMonster(int i){
 		if(i != 999){
 			if(invincible == false && gp.monster[gp.currentMap][i].dyain == false){
@@ -642,33 +638,33 @@ public class Player extends Entity{
 		}
 		return itemIndex;
 	}
-	public boolean canObtainItem(Entity item){
-		boolean canObtain = false;
-		Entity newItem = gp.eGenerator.getObject(item.name);
+	public boolean canObtainItem(Entity item) {
+        boolean canObtain = false;
 
-		// CHECK IF STACKABLE
-		if(newItem.stackable == true){
-			int index = searchItemInventory(newItem.name);
+        Entity newItem = gp.eGenerator.getObject(item.name);
 
-			if(index != 999){
-				inventory.get(index).amout++;
-				canObtain = true;
-			}
-			else { //New item so need to check vacancy
-				if(inventory.size() != maxInventorySize){
-					inventory.add(newItem);
-					canObtain = true;
-				}
-			}
-		}
-		else { // NOT STACKABLE so check vacancy
-			if(inventory.size() != maxInventorySize){
-				inventory.add(newItem);
-				canObtain = true;
-			}
-		}
-		return canObtain;
-	}
+        // CHECK IF STACKABLE
+        if (newItem.stackable) {
+            int index = searchItemInventory(newItem.name);
+
+            if (index != 999) {
+                inventory.get(index).amout++;
+                canObtain = true;
+            } else { // New item so need to check vacancy
+                if (inventory.size() != maxInventorySize) {
+                    inventory.add(newItem);
+                    canObtain = true;
+                }
+            }
+        } else { // NOT STACKABLE so check vacancy
+            if (inventory.size() != maxInventorySize) {
+                inventory.add(newItem);
+                canObtain = true;
+            }
+        }
+
+        return canObtain;
+    }
 	public void draw(Graphics g2) {
 
 		BufferedImage image = null;

@@ -47,7 +47,7 @@ public class EntityGenerator {
             case OBJ_CosmoCrystal.objName: obj = new OBJ_CosmoCrystal(gp); break;
             case OBJ_Pickaxe.objName: obj = new OBJ_Pickaxe(gp); break;
             case OBJ_Door_Iron.objName: obj = new OBJ_Door_Iron(gp); break;
-            //case IT_MetalPlate.objName: obj = new IT_MetalPlate(gp, 0, 0); break;
+           
         }
         return obj;
     }

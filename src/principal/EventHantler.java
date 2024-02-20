@@ -98,7 +98,7 @@ public class EventHantler {
         eventRect[map][col][row].y =  eventRect[map][col][row].eventRectDefultY;
         }
        
-
+        
         return hit;
     }
 
@@ -110,6 +110,7 @@ public class EventHantler {
         eventMaster.startDialogue(eventMaster, 0);
         gp.player.life--;
         canTouchEvent = false;
+        gp.saveLoad.save();
     }
 
     public void healingPool(int gameState){
@@ -133,6 +134,7 @@ public class EventHantler {
    
         canTouchEvent = false;
         gp.playSE(14);
+        gp.saveLoad.save();
         
     }
 

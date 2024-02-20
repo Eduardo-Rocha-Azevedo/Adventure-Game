@@ -45,6 +45,7 @@ public class Entity {
 	public int shotAvailabelCounter = 0;
 	int knockBackCounter = 0;
 	public Entity attacker;
+	public Entity linkedEntity;
 	public int guardCounter = 0;
 	int offBalanceCounter = 0;
 	public int dialogueSet = 0;
@@ -176,6 +177,7 @@ public class Entity {
 		int goalRow = (target.worldY + target.solidArea.y)/gp.tileSize;
 		return goalRow;
 	}
+	public void move(String direction){}
 	public void setAction(){}
 	public void damageReaction(){}
 	public void speak(){
