@@ -138,6 +138,7 @@ public class GamePanel extends JPanel implements Runnable{
         }    
     }
     public void resetGame(boolean restart){
+        currentArea = outside;
         player.setDefultPositions();
         player.retoreStatus();
         player.resetCounter();
@@ -145,7 +146,7 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setNPC();
 
         if(restart = true){
-            player.setDefultValues();
+            //player.setDefultValues();
             aSetter.setObject();
             aSetter.setInteractiveTile();
             eManeger.lighting.resetDay();

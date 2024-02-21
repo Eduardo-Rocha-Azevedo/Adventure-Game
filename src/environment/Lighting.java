@@ -53,9 +53,9 @@ public class Lighting {
             color[6] = new Color(0,0,0.1f,0.82f);
             color[7] = new Color(0,0,0.1f,0.87f);
             color[8] = new Color(0,0,0.1f,0.91f);
-            color[9] = new Color(0,0,0.1f,0.94f);
-            color[10] = new Color(0,0,.1f,0.95f);
-            color[11] = new Color(0,0,.1f,0.96f);
+            color[9] = new Color(0,0,0.1f,0.92f);
+            color[10] = new Color(0,0,.1f,0.93f);
+            color[11] = new Color(0,0,.1f,0.94f);
  
             fraction[0] = 0f;
             fraction[1] = 0.4f;
@@ -93,7 +93,7 @@ public class Lighting {
         // Check the day state
         if(dayState == day){
             dayCounter++;
-            if(dayCounter > 600){ // muda o tempo para  cada state 
+            if(dayCounter > 2600){ // muda o tempo para  cada state 
                 dayState = dusk;
                 dayCounter = 0;
             }
@@ -110,7 +110,7 @@ public class Lighting {
         if(dayState == night){
             dayCounter++;
             
-            if(dayCounter > 600){
+            if(dayCounter > 2600){
                 dayState = dawn;
                 dayCounter = 0;
                 

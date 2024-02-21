@@ -157,12 +157,20 @@ public class Entity {
 	public int getRoW(){
 		return (worldY + solidArea.y) / gp.tileSize;
 	}
+	public int getCenterX(){
+		int centerX = worldX + left1.getWidth()/2;
+		return centerX;
+	}
+	public int getCenterY(){
+		int centerY = worldY + up1.getHeight()/2;
+		return centerY;
+	}
 	public int getXDistance(Entity target){
-		int xDistance = Math.abs(worldX - target.worldX);
+		int xDistance = Math.abs(getCenterX() - target.worldX);
 		return xDistance;
 	}
 	public int getYDistance(Entity target){
-		int yDistance = Math.abs(worldY - target.worldY);
+		int yDistance = Math.abs(getCenterY() - target.worldY);
 		return yDistance;
 	}
 	public int getTileDistance(Entity target){
@@ -329,9 +337,9 @@ public class Entity {
  			shotAvailabelCounter = 0;
  		}
 	}
-	public void getRandomDirection(){
+	public void getRandomDirection(int interval){
 		actionLockCounter++;
-		if(actionLockCounter == 120){
+		if(actionLockCounter == interval){
 			
 			Random random = new Random();
 			int i = random.nextInt(100)+1; // pick up a number from  1 to 100
@@ -515,7 +523,7 @@ public class Entity {
 					if(spriteNum == 2) { image = up2;}
 				}
 				if(attacking == true)  {
-					tempScreenY = screenY - gp.tileSize;
+					tempScreenY = screenY - up1.getHeight();
 					if(spriteNum == 1) {image = attackUp1;}
 					if(spriteNum == 2) {image = attackUp2;}
 				}
@@ -547,7 +555,7 @@ public class Entity {
 						if(spriteNum == 2) {image = left2;}
 					}
 					if(attacking == true){
-						tempScreenX = screenX - gp.tileSize;
+						tempScreenX = screenX - left1.getWidth();
 						if(spriteNum == 1) {image = attackLeft1;}
 						if(spriteNum == 2) {image = attackLeft2;}
 					}

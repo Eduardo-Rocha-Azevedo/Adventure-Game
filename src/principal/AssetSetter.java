@@ -13,6 +13,7 @@ import objects.OBJ_Potion_Blue;
 import objects.OBJ_Potion_Red;
 import objects.OBJ_Sword_Iron;
 import objects.OBJ_Tent;
+import principal.monster.MOM_Bat;
 import principal.monster.MOM_RedSlime;
 import principal.monster.MON_GreenSlime;
 import principal.monster.MON_Orc;
@@ -226,6 +227,32 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldX = gp.tileSize*38;
         gp.monster[mapNum][i].worldY = gp.tileSize*17;
         i++;
+        //BAT =================
+        gp.monster[mapNum][i] = new MOM_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*34;
+        gp.monster[mapNum][i].worldY = gp.tileSize*39;
+        i++;
+
+        gp.monster[mapNum][i] = new MOM_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*36;
+        gp.monster[mapNum][i].worldY = gp.tileSize*25;
+        i++;
+
+        gp.monster[mapNum][i] = new MOM_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*39;
+        gp.monster[mapNum][i].worldY = gp.tileSize*26;
+        i++;
+
+        gp.monster[mapNum][i] = new MOM_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*28;
+        gp.monster[mapNum][i].worldY = gp.tileSize*11;
+        i++;
+
+        gp.monster[mapNum][i] = new MOM_Bat(gp);
+        gp.monster[mapNum][i].worldX = gp.tileSize*10;
+        gp.monster[mapNum][i].worldY = gp.tileSize*19;
+        i++;
+        
     }
 
     public void setInteractiveTile(){
