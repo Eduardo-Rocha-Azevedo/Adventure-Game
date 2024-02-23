@@ -7,6 +7,7 @@ public class KeyHandler implements KeyListener {
 
     public boolean up,down, left, right, enterPressed, shotKeyPressed, spacePressed;
     boolean showDebugText = false;
+    //public boolean godModeON = false;
     public GamePanel gp;
 
     //CONSTRUCTOR =======================
@@ -39,7 +40,7 @@ public class KeyHandler implements KeyListener {
            pauseState(code);
         }
         //DIALOG STATE
-         else if(gp.gameState == gp.dialogState){
+         else if(gp.gameState == gp.dialogState || gp.gameState == gp.cutsceneState){
             dialogState(code);
         }
 
@@ -219,6 +220,14 @@ public class KeyHandler implements KeyListener {
                 case 2: gp.tileM.loadMap("/maps/dangeon1.txt",2); break;
             }
         }
+        /*if(code == KeyEvent.VK_G) {
+            if(godModeON == false){
+                godModeON = true;
+            }
+            else if(godModeON == true){
+                godModeON = false;
+            }
+         } */
     }
 
     public void pauseState(int code){

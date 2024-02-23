@@ -93,6 +93,7 @@ public class UI {
         if(gp.gameState == gp.playState){
             //HEARTS
             drawPlayerLife();
+            drawMonsterLife();
             drawMessage();
         }
         //PAUSE STATE
@@ -143,14 +144,21 @@ public class UI {
         
         int x = gp.tileSize/2;
         int y = gp.tileSize/2;
-
+        int iconSize = 32;
+        int cosmoStartX = (gp.tileSize/2)-5;
+        int cosmoStartY = 0;
         int i = 0;
 
         //draw max hearts
         while(i < gp.player.maxLife/2){
-            g2.drawImage(heart_blank, x, y, null);
+            g2.drawImage(heart_blank, x, y,iconSize,iconSize, null);
             i++;
-            x += gp.tileSize;
+            x += iconSize;
+            cosmoStartY = y + iconSize;
+            if(i % 8 == 0){
+                x = gp.tileSize/2;
+                y += iconSize;
+            }
         }
         //reset
         x = gp.tileSize/2;
@@ -159,22 +167,22 @@ public class UI {
 
         //draw current life
         while(i < gp.player.life){
-            g2.drawImage(heart_half, x, y, null);
+            g2.drawImage(heart_half, x, y,iconSize,iconSize, null);
             i++;
             if(i < gp.player.life){
-                g2.drawImage(heart_full, x, y,null);
+                g2.drawImage(heart_full, x, y,iconSize,iconSize,null);
             }
             i++;
-            x += gp.tileSize;
+            x += iconSize;
         }
         //draw max cosmo crystal
         x = (gp.tileSize/2) -5;
         y = (int)(gp.tileSize*1.5);
         i = 0;
         while(i < gp.player.maxCosmo){
-            g2.drawImage(cosmo_blank, x, y, null);
+            g2.drawImage(cosmo_blank, x, y,iconSize,iconSize, null);
             i++;
-            x += 35; 
+            x += 25; 
         }
 
         //draw cosmo
@@ -182,9 +190,9 @@ public class UI {
         y = (int)(gp.tileSize*1.5);
         i = 0;
         while(i < gp.player.cosmo){
-            g2.drawImage(cosmo_full, x, y, null);
+            g2.drawImage(cosmo_full, x, y,iconSize,iconSize, null);
             i++;
-            x += 35; 
+            x += 25; 
         }
     }
     public void drawMessage(){
@@ -211,7 +219,7 @@ public class UI {
         }
     }
     public void drawTitleScreen() {
-		
+		BufferedImage icon;
 		if(titleScreenState == 0) {
 			//TITLE NAME
            // gp.playMusic(12);
@@ -352,18 +360,23 @@ public class UI {
             }
 
             if(gp.keyH.enterPressed == true){
-                if(gp.gameState == gp.dialogState){
-                    charIndex = 0;
-                    combinedText = "";
+                charIndex = 0;
+                combinedText = "";
+
+                if(gp.gameState == gp.dialogState || gp.gameState == gp.cutsceneState){
+                    
                     npc.dialogIndex++;
                     gp.keyH.enterPressed = false;
                 }
             }
         }
-        else{
-            npc.dialogueSet = 0;
+        else{ // If no text is in the array
+            npc.dialogIndex = 0;
             if(gp.gameState == gp.dialogState){
                 gp.gameState = gp.playState;
+            }
+            if(gp.gameState == gp.cutsceneState){
+                gp.csManager.scenePhase++;
             }
         }
         
@@ -599,99 +612,53 @@ public class UI {
             }
         }
     }
-   /*  public void drawPlayerInventory(){
+    public void drawMonsterLife(){
+        for(int i = 0; i < gp.monster[1].length; i++){ 
 
-        int frameX = gp.tileSize*12;
-        int frameY = gp.tileSize;
-        int frameWidth = gp.tileSize*6;
-        int frameHeight = gp.tileSize*5;
-        int slotCol = playerSlotCol;
-        int slotRow = playerSlotRow;
-       
-       
-        //Create a frame
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+            Entity monster = gp.monster[gp.currentMap][i];
+
+            if(monster != null && monster.inCamera() == true){
+
+                if(monster.hpBarOn == true && !monster.boss){
+
+                    double oneScale = (double)gp.tileSize /monster.maxLife;
+                    double hpBarValue = oneScale * monster.life;
         
-
-        //Slot 
-        final int slotXStart = frameX + 20;
-        final int slotYStart = frameY + 20;
-        int slotX = slotXStart;
-        int slotY = slotYStart;
-        int slotSize = gp.tileSize +3;
-
-
-        //Draw player's items
-        for (int i = 0; i < gp.player.inventory.size(); i++) {
-            // EQUIP CURSOR
-            if (gp.player.inventory.get(i) == gp.player.currentWeapon ||
-                gp.player.inventory.get(i) == gp.player.currentShield ||
-                gp.player.inventory.get(i) == gp.player.currentLight) {
-
-                g2.setColor(new Color(240, 190, 90));
-                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
-            }
+                    g2.setColor(new Color(35,35,35));
+                    g2.fillRect(monster.getScreenX() - 2, monster.getScreenY()- 2, gp.tileSize + 4, 12);
         
-
-            g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
-            //Display Amount
-            if(gp.player.inventory.get(i).amout > 1){
-                g2.setFont(g2.getFont().deriveFont(32f));
-                int amoutX;
-                int amoutY;
-
-                String s = ""+ gp.player.inventory.get(i).amout;
-                amoutX = getXForAlignToRightText(s, slotX + 44);
-                amoutY = slotY + gp.tileSize;
-
-                //Shadow
-                g2.setColor(new Color(60,60,60));
-                g2.drawString(s, amoutX, amoutY);
-                //Number
-                g2.setColor(Color.white);
-                g2.drawString(s, amoutX - 3, amoutY - 3);
-            }
- 
-            slotX += slotSize;
-
-            if (i == 4 || i == 9 || i == 14) {
-                slotX = slotXStart;
-                slotY += slotSize;
-            }
+                    g2.setColor(new Color(255,0,30));
+                    g2.fillRect(monster.getScreenX(), monster.getScreenY() - 1, (int)hpBarValue, 10);
         
-        }
-        //Draw cursor
-    
-         //Item selector cursor
-            int cursorX = slotXStart + (slotSize * slotCol);
-            int cursorY = slotYStart + (slotSize * slotRow);
-            int cursorWidth = gp.tileSize;
-            int cursorHeight = gp.tileSize;
-            g2.setColor(Color.white);
-            g2.setStroke(new BasicStroke(3));
-            g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
-
-          //Description frame
-            int dFrameX = frameX;
-            int dFrameY = frameY + frameHeight;
-            int dFrameWidth = frameWidth;
-            int dFrameHeight = gp.tileSize*3;
-            
-
-            //Draw description
-         int textX = dFrameX + 20;
-            int textY = dFrameY + gp.tileSize;
-            g2.setFont(g2.getFont().deriveFont(28f));
-            int itemIndex = getItemIndexOnSlot(slotCol, slotRow);
-
-            if(itemIndex < gp.player.inventory.size()){
-                drawSubWindow(dFrameX, dFrameY, dFrameWidth, dFrameHeight);
-                for(String line:gp.player.inventory.get(itemIndex).description.split("\n")) {
-                    g2.drawString(line, textX, textY);
-                    textY += 30;
+                    monster.hpBarCounter++;
+        
+                    if(monster.hpBarCounter > 600){
+                        monster.hpBarCounter = 0;
+                        monster.hpBarOn = false;	
+                    }
                 }
-            } 
-    }*/
+                else if(monster.boss){
+
+                    double oneScale = (double)(gp.tileSize*8) /monster.maxLife;
+                    double hpBarValue = oneScale * monster.life;
+
+                    int x = gp.screenWith/2 - gp.tileSize*4;
+                    int y = gp.tileSize*10;
+        
+                    g2.setColor(new Color(35,35,35));
+                    g2.fillRect(x-1, y-1, gp.tileSize*8 + 2, 22);
+        
+                    g2.setColor(new Color(255,0,30));
+                    g2.fillRect(x,y, (int)hpBarValue, 20);
+
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+                    g2.setColor(Color.white);
+                    g2.drawString(monster.name, x + 4, y - 10);
+                }
+            }
+        }
+    }
+
     public void drawGameOverScreen(){
        
         g2.setColor(new Color(0,0,0,150));

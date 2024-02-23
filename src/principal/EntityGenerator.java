@@ -2,6 +2,7 @@ package principal;
 
 import entity.Entity;
 import objects.OBJ_Axe;
+import objects.OBJ_BlueHeart;
 import objects.OBJ_Chest;
 import objects.OBJ_Coin_gold;
 import objects.OBJ_CosmoCrystal;
@@ -47,7 +48,7 @@ public class EntityGenerator {
             case OBJ_CosmoCrystal.objName: obj = new OBJ_CosmoCrystal(gp); break;
             case OBJ_Pickaxe.objName: obj = new OBJ_Pickaxe(gp); break;
             case OBJ_Door_Iron.objName: obj = new OBJ_Door_Iron(gp); break;
-           
+            case OBJ_BlueHeart.objName: obj = new OBJ_BlueHeart(gp); break;
         }
         return obj;
     }

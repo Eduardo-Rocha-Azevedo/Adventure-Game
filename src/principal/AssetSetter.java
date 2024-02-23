@@ -1,8 +1,10 @@
 package principal;
 import principal.GamePanel;
+import data.Progress;
 import entity.NPC_BigRock;
 import entity.NPC_Merchant;
 import entity.NPC_Old_man;
+import objects.OBJ_BlueHeart;
 import objects.OBJ_Chest;
 import objects.OBJ_Door;
 import objects.OBJ_Door_Iron;
@@ -15,6 +17,7 @@ import objects.OBJ_Sword_Iron;
 import objects.OBJ_Tent;
 import principal.monster.MOM_Bat;
 import principal.monster.MOM_RedSlime;
+import principal.monster.MOM_Skeleton;
 import principal.monster.MON_GreenSlime;
 import principal.monster.MON_Orc;
 import tile_interactive.IT_DestructibleWall;
@@ -32,7 +35,8 @@ public class AssetSetter {
         
         int i = 0;
         int mapNum = 0;
-        
+     
+
         //Door ===================================
         gp.obj[mapNum][i] = new OBJ_Door(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*14;
@@ -124,6 +128,26 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = gp.tileSize*23;
         i++;
 
+        
+        // DOUNGEON FINAL BATTLE===================================>
+        mapNum = 3;
+        i = 0;
+       
+        gp.obj[mapNum][i] = new OBJ_Door_Iron(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*25;
+        gp.obj[mapNum][i].worldY = gp.tileSize*15;
+        i++;  
+
+        gp.obj[mapNum][i] = new OBJ_BlueHeart(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*25;
+        gp.obj[mapNum][i].worldY = gp.tileSize*8;
+        i++; 
+
+        gp.obj[mapNum][i] = new OBJ_BlueHeart(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*25;
+        gp.obj[mapNum][i].worldY = gp.tileSize*9;
+        i++; 
+
     }
 
     public void setNPC(){
@@ -162,7 +186,6 @@ public class AssetSetter {
         gp.npc[mapNum][i].worldX = gp.tileSize*23;
         gp.npc[mapNum][i].worldY = gp.tileSize*14;
         i++;
-        
 
     }
 
@@ -253,6 +276,15 @@ public class AssetSetter {
         gp.monster[mapNum][i].worldY = gp.tileSize*19;
         i++;
         
+        //DAUGEON FINAL BATTLE===================================>
+        mapNum = 3;
+        i = 0;
+       
+            gp.monster[mapNum][i] = new MOM_Skeleton(gp);
+            gp.monster[mapNum][i].worldX = gp.tileSize*23;
+            gp.monster[mapNum][i].worldY = gp.tileSize*16;
+            i++;
+        
     }
 
     public void setInteractiveTile(){
@@ -312,8 +344,9 @@ public class AssetSetter {
         gp.iTile[mapNum][i] = new IT_MetalPlate(gp,8,17); i++;
         gp.iTile[mapNum][i] = new IT_MetalPlate(gp,39,31); i++;
 
-
-        
+        // DOUNGEON FINAL BATTLE===================================>
+        mapNum = 3;
+        i = 0;        
        
     }
 }

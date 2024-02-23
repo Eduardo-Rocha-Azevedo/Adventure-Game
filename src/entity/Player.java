@@ -67,7 +67,7 @@ public class Player extends Entity{
 		level = 1;
 		maxLife = 6;
 		life = maxLife;	
-		strength = 1; //The more strength he has, the more damage
+		strength = 5; //The more strength he has, the more damage
 		dexterity = 1; // the more dexterity he has, the more defense
 		exp = 0;
 		nextLevelExp = 5;
@@ -391,14 +391,14 @@ public class Player extends Entity{
 		if(cosmo > maxCosmo){
 			cosmo = maxCosmo;
 		}
-
-		if(life <= 0){
+		if(keyH.godModeON == false){
+			if(life <= 0){
 			gp.gameState = gp.gameOverState;
 			gp.ui.commandNum--;
 			//gp.stopMusic();
 			gp.playSE(13);
-
-		}
+			}
+		}	
 	}
 
 	public void attacking(){
@@ -737,10 +737,13 @@ public class Player extends Entity{
 		}
 		if(transparent == true){
 			
-			// g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.4f));
+			//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+
+		}
+		if(drawing == true){
+			g2.drawImage(image, tempScreenX, tempScreenY, null);
 		}
 		
-		g2.drawImage(image, tempScreenX, tempScreenY, null);
 
 		//reset alpha
 		//g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));

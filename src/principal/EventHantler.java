@@ -2,6 +2,8 @@ package principal;
 
 import entity.Entity;
 import java.lang.Math;
+
+import data.Progress;
 public class EventHantler {
     GamePanel gp;
     EventRect eventRect[][][];
@@ -70,7 +72,7 @@ public class EventHantler {
             else if(hit(2,7,41,"any") == true){teleport(0, 10, 8, gp.outside);}
             else if(hit(2,8,7,"any") == true){teleport(3, 30, 40, gp.dungeon);}
             else if(hit(3,30,40,"any") == true){teleport(2, 8, 7, gp.dungeon);}
-           
+            else if(hit(3,25,27,"any") == true){skeletonLord();}
         }
        
     }
@@ -144,6 +146,14 @@ public class EventHantler {
            gp.player.attackCanceled = true;
            e.speak();
        }
+    }
+
+    public void skeletonLord(){
+        if(gp.bossBattleOn == false && Progress.skeletonLordDefeated == false){
+            gp.gameState = gp.cutsceneState;
+            gp.csManager.sceneNum = gp.csManager.skeletonLord;
+            
+        }
     }
 
 }

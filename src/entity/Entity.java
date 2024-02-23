@@ -41,7 +41,7 @@ public class Entity {
 	public int spriteCouter = 0;
 	public int spriteNum = 1;
 	int dyainCounter = 0;
-	int hpBarCounter = 0;
+	public int hpBarCounter = 0;
 	public int shotAvailabelCounter = 0;
 	int knockBackCounter = 0;
 	public Entity attacker;
@@ -49,19 +49,23 @@ public class Entity {
 	public int guardCounter = 0;
 	int offBalanceCounter = 0;
 	public int dialogueSet = 0;
+	public boolean temp = false;
 
 	//state
 	public boolean collision = false;
 	public boolean attacking = false;
 	public boolean alive = true;
 	public boolean dyain = false;
-	boolean hpBarOn = false;
+	public boolean hpBarOn = false;
 	public boolean onPath = false;
 	public boolean knockBack = false;
 	public String knockBackDirection;
 	public boolean guarding = false;
 	public boolean transparent = false;
 	public boolean offBalance = false;
+	public boolean inRange = false;
+	public boolean sleep = false;
+	public boolean drawing = true;
 
 	//DIALOG
 	public String dialogues[][] = new String[20][20];
@@ -93,6 +97,7 @@ public class Entity {
 	public final int maxInventorySize = 20;
 	public int motion1_duration;
 	public int motion2_duration;
+	public boolean boss = false;
 
 	// ITEM ATTRIBUTES
 	public int attackValue;
@@ -185,6 +190,14 @@ public class Entity {
 		int goalRow = (target.worldY + target.solidArea.y)/gp.tileSize;
 		return goalRow;
 	}
+	public int getScreenX(){
+		int screenX = worldX - gp.player.worldX + gp.player.screenX;
+		return screenX;
+	}
+	public int getScreenY(){
+		int screenY = worldY - gp.player.worldY + gp.player.screenY;
+		return screenY;
+	}
 	public void move(String direction){}
 	public void setAction(){}
 	public void damageReaction(){}
@@ -233,7 +246,8 @@ public class Entity {
 		}
 	}
 	public void update(){
-		if(knockBack == true){
+		if(sleep == false){
+			if(knockBack == true){
 			checkCollision();
 
 			if(collisioOn == true){
@@ -298,8 +312,10 @@ public class Entity {
 		if(offBalance){
 			offBalanceCounter++;
 			if(offBalanceCounter > 60){
-				offBalance = false;
-				offBalanceCounter = 0;
+					offBalance = false;
+					offBalanceCounter = 0;
+					
+				}
 			}
 		}
 	}
@@ -413,22 +429,22 @@ public class Entity {
 
 		switch(direction){
 			case "up":
-				if(gp.player.worldY < worldY && yDis < straingth && xDis < horizontal){
+				if(gp.player.getCenterY()< getCenterY() && yDis < straingth && xDis < horizontal){
 					targetInRate = true;
 				}
 				break;
 			case "down":
-				if(gp.player.worldY > worldY && yDis < straingth && xDis < horizontal){
+				if(gp.player.getCenterY() > getCenterY() && yDis < straingth && xDis < horizontal){
 					targetInRate = true;
 				}
 			break;
 			case "left":
-				if(gp.player.worldX < worldX && xDis < straingth && yDis < horizontal){
+				if(gp.player.getCenterX()< getCenterX() && xDis < straingth && yDis < horizontal){
 					targetInRate = true;
 				}
 				break;
 			case "right":
-				if(gp.player.worldX > worldX && xDis < straingth && yDis < horizontal){
+				if(gp.player.getCenterX() > getCenterX() && xDis < straingth && yDis < horizontal){
 					targetInRate = true;
 				}
 			break;
@@ -485,6 +501,28 @@ public class Entity {
 			gp.player.invincible = true; 
 		}
 	}
+	public void moveTowardPlayer(int interval){
+		actionLockCounter++;
+		if(actionLockCounter > interval){
+			if(getXDistance(gp.player) > getYDistance(gp.player)){
+				if(gp.player.getCenterX() < getCenterX()){
+					direction = "left";
+				}
+				else if(gp.player.getCenterX() > getCenterX()){
+					direction = "right";
+				}
+			}
+			else if(getXDistance(gp.player) < getYDistance(gp.player)){
+				if(gp.player.getCenterY() < getCenterY()){
+					direction = "up";
+				}
+				else {
+					direction = "down";
+				}
+			}
+			actionLockCounter = 0;
+		}
+	}
 	public String getOppositeDirection(String direction){
 		String oppositeDirection = "";
 		switch(direction){
@@ -502,20 +540,28 @@ public class Entity {
 		target.knockBack = true;
 	}
 
+	public boolean inCamera(){
+		boolean inCamera = false;
+
+		if(worldX + gp.tileSize *5 > gp.player.worldX - gp.player.screenX && 
+			worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
+			worldY + gp.tileSize *5> gp.player.worldY - gp.player.screenY && 
+			worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+
+			inCamera = true;
+		}
+		return inCamera;
+	}
 	
 	public void draw(Graphics2D g2){
 		
 		BufferedImage image = null;
-		int screenX = worldX - gp.player.worldX + gp.player.screenX;
-        int screenY = worldY - gp.player.worldY + gp.player.screenY;
-		int tempScreenX = screenX;
-		int tempScreenY = screenY;
-        if(worldX + gp.tileSize > gp.player.worldX - gp.player.screenX && 
-			worldX - gp.tileSize < gp.player.worldX + gp.player.screenX && 
-			worldY + gp.tileSize > gp.player.worldY - gp.player.screenY && 
-			worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
+		
+		int tempScreenX = getScreenX();
+		int tempScreenY = getScreenY();
 
-	
+        if(inCamera() == true){
+
 			switch(direction){
 				case "up": 
 				if(attacking == false) {
@@ -523,7 +569,7 @@ public class Entity {
 					if(spriteNum == 2) { image = up2;}
 				}
 				if(attacking == true)  {
-					tempScreenY = screenY - up1.getHeight();
+					tempScreenY = getScreenY() - up1.getHeight();
 					if(spriteNum == 1) {image = attackUp1;}
 					if(spriteNum == 2) {image = attackUp2;}
 				}
@@ -555,7 +601,7 @@ public class Entity {
 						if(spriteNum == 2) {image = left2;}
 					}
 					if(attacking == true){
-						tempScreenX = screenX - left1.getWidth();
+						tempScreenX = getScreenX() - left1.getWidth();
 						if(spriteNum == 1) {image = attackLeft1;}
 						if(spriteNum == 2) {image = attackLeft2;}
 					}
@@ -579,27 +625,7 @@ public class Entity {
 					}
 					break;	
 		}
-		// Monster HP bar
-		if(type == type_monster && hpBarOn == true){
-
-			double oneScale = (double)gp.tileSize /maxLife;
-			double hpBarValue = oneScale * life;
-
-			g2.setColor(new Color(35,35,35));
-			g2.fillRect(screenX - 2, screenY - 2, gp.tileSize + 4, 12);
-
-			g2.setColor(new Color(255,0,30));
-			g2.fillRect(screenX, screenY - 1, (int)hpBarValue, 10);
-
-			hpBarCounter++;
-
-			if(hpBarCounter > 600){
-				hpBarCounter = 0;
-				hpBarOn = false;	
-			}
-		}
 		
-
 		if(invincible == true){
 			hpBarOn = true;
 			hpBarCounter = 0;
@@ -610,9 +636,12 @@ public class Entity {
 			dyainAnimation(g2);
 		}
 
-        g2.drawImage(image, tempScreenX, tempScreenY, null);
+		if(drawing == true){
+			g2.drawImage(image, tempScreenX, tempScreenY, null);
+		}
 		changeAlpha(g2, 1f);
         }
+		
 	}
 	
 	

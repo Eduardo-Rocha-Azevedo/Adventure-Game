@@ -104,7 +104,6 @@ public class Lighting {
             if(filterAlpha > 1f){
                 filterAlpha = 1f;
                 dayState = night;
-                gp.aSetter.setMonster();
             }    
         }
         if(dayState == night){

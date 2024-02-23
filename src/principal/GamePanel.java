@@ -75,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     //ENTITY AND OBJECTS
     public Player player = new Player(this,keyH);
-    public Entity obj[][] = new Entity[maxMap][20];
+    public Entity obj[][] = new Entity[maxMap][50];
     public Entity npc[][] = new Entity[maxMap][10]; 
     public Entity monster[][] = new Entity[maxMap][20];
     public InteractiveTile iTile[][] = new InteractiveTile[maxMap][50];//caso precise de mais tiles interativos aumetar
@@ -83,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
     public ArrayList<Entity> projectileList = new ArrayList<>();
     public ArrayList<Entity> particleList = new ArrayList<>();
     ArrayList<Entity> entityList = new ArrayList<>();
+    public CutsceneManager csManager = new CutsceneManager(this);
     public EntityGenerator eGenerator = new EntityGenerator(this);
 
     //AREA 
@@ -106,6 +107,10 @@ public class GamePanel extends JPanel implements Runnable{
     public final int tradeState = 8;
     public final int sleepState = 9;
     public final int mapState = 10;
+    public final int cutsceneState = 11;
+
+    // OTHERS
+    public boolean bossBattleOn = false;
 
     //CONSTRUCTOR======================
     public GamePanel() {
@@ -138,7 +143,10 @@ public class GamePanel extends JPanel implements Runnable{
         }    
     }
     public void resetGame(boolean restart){
+        stopMusic();
         currentArea = outside;
+        removeTempEntity();
+        bossBattleOn = false;
         player.setDefultPositions();
         player.retoreStatus();
         player.resetCounter();
@@ -323,6 +331,9 @@ public class GamePanel extends JPanel implements Runnable{
 
             //Mini map
             map.drawMiniMap(g2);
+
+            //CUTSCENE
+            csManager.draw(g2);
     
             //UI
             ui.draw(g2);
@@ -331,21 +342,22 @@ public class GamePanel extends JPanel implements Runnable{
  
          //debug
          if(keyH.showDebugText == true){
-             long drawEnd = System.nanoTime();
-             long passed  = drawEnd - drawStart;
+            long drawEnd = System.nanoTime();
+            long passed  = drawEnd - drawStart;
  
-             g2.setFont(new Font("arial", Font.PLAIN, 15));
-             g2.setColor(Color.WHITE);
+            g2.setFont(new Font("arial", Font.PLAIN, 15));
+            g2.setColor(Color.WHITE);
  
-             int x = 10;
-             int y = 400;
-             int lineHeight = 20;
+            int x = 10;
+            int y = 400;
+            int lineHeight = 20;
  
-             g2.drawString("WorldX: "+ player.worldX, x, y); y += lineHeight;
-             g2.drawString("WorldY: " + player.worldY , x, y); y += lineHeight;
-             g2.drawString("Col: "+ (player.worldX + player.solidArea.x)/tileSize, x, y); y += lineHeight;
-             g2.drawString("Row: " + (player.worldY + player.solidArea.y)/tileSize, x, y); y += lineHeight;
-             g2.drawString("Draw Time: " + passed, x, y);
+            g2.drawString("WorldX: "+ player.worldX, x, y); y += lineHeight;
+            g2.drawString("WorldY: " + player.worldY , x, y); y += lineHeight;
+            g2.drawString("Col: "+ (player.worldX + player.solidArea.x)/tileSize, x, y); y += lineHeight;
+            g2.drawString("Row: " + (player.worldY + player.solidArea.y)/tileSize, x, y); y += lineHeight;
+            g2.drawString("Draw Time: " + passed, x, y);
+           // g2.drawString("Invencible" + keyH.godModeON, x, y);
             
         }
     }
@@ -387,6 +399,17 @@ public class GamePanel extends JPanel implements Runnable{
         currentArea = nextArea;
         aSetter.setMonster();
     }
+
+    public void removeTempEntity(){
+        for(int mapNum = 0; mapNum < maxMap; mapNum++){
+            for(int i = 0; i < obj[1].length; i++){
+                if(obj[mapNum][i] != null && obj[mapNum][i].temp == true){
+                    obj[mapNum][i] = null;
+                }
+            }
+        }
+    }
+
     @Override
     public void run(){  
         double drawInterval = 1000000000/FPS;
