@@ -4,7 +4,7 @@
 <p>Ainda em desenvolvimento, em breve a disponibilidade de instalar </p>
 <h2>Requisitos</h2>
 <ul>
-  <li>Java - JDK para instalar <a href="https://www.java.com/pt-BR/">aqui</a></li>
+  <li>Java SE- para instalar <a href="https://www.java.com/pt-BR/download/">aqui</a></li>
   <li>Teclado</li>
 </ul>
 <h2>Disponibilidade</h2>
