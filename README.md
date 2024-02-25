@@ -1,7 +1,8 @@
 <h1>Ancient Ruin</h1>
 <h2>Motivo do desenvolvimento</h2>
 <p>Este projeto foi idealizado para estudar paradigmas de programação utilizando a linguagem Java, tais como orientação a objetos e estrutura de dados</p>
-<p>Ainda em desenvolvimento, em breve a disponibilidade de instalar </p>
+<p>Primeira versão lançada</p>
+<p>Link para instalar <a href="https://eduardo-azevedo.itch.io/ancient-ruins">aqui</a></p>
 <h2>Requisitos</h2>
 <ul>
   <li>Java SE- para instalar <a href="https://www.java.com/pt-BR/download/">aqui</a></li>
